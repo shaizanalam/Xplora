@@ -241,7 +241,7 @@ export default function HomePage() {
           {/* Bottom annotation */}
           <div style={{ marginTop: 'clamp(4rem,8vw,7rem)', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)' }}>
             <span>03 / 06&nbsp;—&nbsp;ABOUT XPLORA</span>
-            <span className="about-mid">Krishna Public School&nbsp;::&nbsp;Raipur,Chhattisghar</span>
+            <span className="about-mid">Krishna Public School&nbsp;::&nbsp;RAIPUR, CHHATTISGARH</span>
             <span>TECHFEST&nbsp;//&nbsp;ANNUAL</span>
           </div>
         </div>
