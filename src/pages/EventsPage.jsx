@@ -48,7 +48,7 @@ export default function EventsPage() {
                 textTransform: 'uppercase', color: '#fff',
               }}>
                 THE<br />
-                <span className="glow-text-lg" style={{ color: 'var(--cyan-400)' }}>EVENTS.</span>
+                <span className="glow-text-lg" style={{ color: 'var(--mag-200)' }}>EVENTS.</span>
               </h1>
             </div>
             <div style={{ gridColumn: 'span 5', borderLeft: '1px solid rgba(229,0,106,0.2)', paddingLeft: '1.75rem' }}>
@@ -104,8 +104,8 @@ export default function EventsPage() {
                 display: 'flex', flexDirection: 'column', gap: 14,
                 cursor: 'pointer',
                 background: (hovered === ev.num || expanded === ev.num)
-                  ? 'linear-gradient(155deg, rgba(0,40,45,0.95) 0%, rgba(0,0,0,0.98) 100%)'
-                  : 'rgba(34,211,238,0.02)',
+                  ? 'linear-gradient(155deg, rgba(40,0,20,0.95) 0%, rgba(0,0,0,0.98) 100%)'
+                  : 'rgba(229,0,106,0.02)',
                 transition: 'all 0.28s var(--ease-out-expo)',
               }}
             >
@@ -113,11 +113,11 @@ export default function EventsPage() {
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.07)', paddingBottom: '1rem' }}>
                 <span style={{
                   fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '2.4rem', lineHeight: 1,
-                  color: (hovered === ev.num || expanded === ev.num) ? 'var(--cyan-400)' : 'var(--cyan-500)',
+                  color: (hovered === ev.num || expanded === ev.num) ? 'var(--mag-200)' : 'var(--mag-500)',
                   transition: 'color 0.28s',
-                  ...((hovered === ev.num || expanded === ev.num) ? { textShadow: '0 0 16px rgba(34,211,238,0.6)' } : {}),
+                  ...((hovered === ev.num || expanded === ev.num) ? { textShadow: '0 0 16px rgba(229,0,106,0.6)' } : {}),
                 }}>{ev.num}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.3rem', color: (hovered === ev.num || expanded === ev.num) ? 'var(--cyan-400)' : 'rgba(255,255,255,0.18)', transition: 'color 0.28s' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.3rem', color: (hovered === ev.num || expanded === ev.num) ? 'var(--mag-200)' : 'rgba(255,255,255,0.18)', transition: 'color 0.28s' }}>
                   {ev.icon}
                 </span>
               </div>
@@ -128,7 +128,7 @@ export default function EventsPage() {
                   fontFamily: 'var(--font-display)', fontWeight: 900,
                   fontSize: 'clamp(1.5rem, 2.8vw, 2.1rem)', textTransform: 'uppercase',
                   letterSpacing: '-0.01em',
-                  color: (hovered === ev.num || expanded === ev.num) ? 'var(--cyan-400)' : '#fff',
+                  color: (hovered === ev.num || expanded === ev.num) ? 'var(--mag-200)' : '#fff',
                   marginBottom: '0.35rem',
                   transition: 'color 0.28s',
                 }}>{ev.name}</h3>
@@ -144,18 +144,18 @@ export default function EventsPage() {
               {expanded === ev.num && (
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1rem', marginTop: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--cyan-500)' }}>TEAM SIZE:</span>
+                    <span style={{ color: 'var(--mag-500)' }}>TEAM SIZE:</span>
                     <span>2-4 MEMBERS</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--cyan-500)' }}>PRIZE POOL:</span>
+                    <span style={{ color: 'var(--mag-500)' }}>PRIZE POOL:</span>
                     <span>₹10,000</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--cyan-500)' }}>REG DEADLINE:</span>
+                    <span style={{ color: 'var(--mag-500)' }}>REG DEADLINE:</span>
                     <span>NOV 10</span>
                   </div>
-                  <a href="/#/register" onClick={(e) => e.stopPropagation()} className="btn btn-outline" style={{ width: '100%', marginTop: '1.25rem', borderColor: 'var(--cyan-500)', color: 'var(--cyan-400)' }}>
+                  <a href="/#/register" onClick={(e) => e.stopPropagation()} className="btn btn-outline" style={{ width: '100%', marginTop: '1.25rem', borderColor: 'var(--mag-500)', color: 'var(--mag-400)' }}>
                     REGISTER TEAM ↗
                   </a>
                 </div>
@@ -168,7 +168,7 @@ export default function EventsPage() {
                 fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.18em', textTransform: 'uppercase',
               }}>
                 <span style={{ color: 'rgba(255,255,255,0.4)' }}>{ev.cat}</span>
-                <span style={{ color: (hovered === ev.num || expanded === ev.num) ? 'var(--cyan-400)' : 'rgba(255,255,255,0.22)', transition: 'color 0.28s' }}>
+                <span style={{ color: (hovered === ev.num || expanded === ev.num) ? 'var(--mag-200)' : 'rgba(255,255,255,0.22)', transition: 'color 0.28s' }}>
                   {expanded === ev.num ? 'COLLAPSE ↑' : 'LEARN MORE →'}
                 </span>
               </div>
@@ -201,7 +201,7 @@ export default function EventsPage() {
                   textTransform: 'uppercase', color: '#fff', marginBottom: '1.5rem',
                 }}>
                   BUILD.<br />
-                  <span className="glow-text" style={{ color: 'var(--cyan-400)' }}>COMPETE.</span><br />
+                  <span className="glow-text" style={{ color: 'var(--mag-200)' }}>COMPETE.</span><br />
                   DOMINATE.
                 </h3>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.6, color: 'rgba(255,255,255,0.6)' }}>
@@ -242,7 +242,7 @@ export default function EventsPage() {
               textTransform: 'uppercase', color: '#fff',
             }}>
               REGISTER<br />
-              <span className="glow-text-lg" style={{ color: 'var(--cyan-400)' }}>NOW.</span>
+              <span className="glow-text-lg" style={{ color: 'var(--mag-200)' }}>NOW.</span>
             </h2>
             <a href="/#/register" className="btn btn-solid" style={{ padding: '1.1rem 3rem', fontSize: '0.75rem' }}>
               REGISTER FOR XPLORA →
