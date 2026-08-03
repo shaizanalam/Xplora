@@ -67,7 +67,7 @@ function Header() {
               textTransform: 'uppercase', color: '#fff',
               lineHeight: 1,
             }}>
-              XPLORA<span style={{ color: 'var(--mag-200)' }}>//</span>KPS
+              XPLORA<span style={{ color: 'var(--mag-200)' }}>.</span>KPS
             </span>
           </NavLink>
 
@@ -172,10 +172,10 @@ function Header() {
       </div>
 
       <style>{`
-        .hdr-desktop-nav { display: none; }
-        .hdr-cta         { display: none; }
-        .hdr-burger      { display: flex; }
-        @media (min-width: 900px) {
+        .hdr-desktop-nav { display: none !important; }
+        .hdr-cta         { display: none !important; }
+        .hdr-burger      { display: flex !important; }
+        @media (min-width: 1024px) {
           .hdr-desktop-nav { display: flex !important; }
           .hdr-cta         { display: inline-flex !important; }
           .hdr-burger      { display: none !important; }
