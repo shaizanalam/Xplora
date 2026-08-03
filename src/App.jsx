@@ -230,7 +230,7 @@ function Footer() {
             </h2>
           </div>
           <NavLink to="/register" className="btn btn-solid" style={{ padding: '1.2rem 3rem', alignSelf: 'flex-end', fontSize: '0.72rem' }}>
-            REGISTER NOW ↗
+            SECURE YOUR SPOT ↗
           </NavLink>
         </div>
 
