@@ -562,8 +562,8 @@ body { background: var(--black); overflow-x: hidden; }
     word-break: break-word;
   }
 
-  /* Full-width touch-friendly buttons */
-  .btn {
+  /* Full-width touch-friendly buttons — exclude countdown CTAs which sit side-by-side */
+  .btn:not(.countdown-cta) {
     width: 100% !important;
     justify-content: center !important;
     padding: 0.85rem 1.25rem !important;
@@ -573,5 +573,16 @@ body { background: var(--black); overflow-x: hidden; }
   div[style*="minmax(290px, 1fr)"],
   div[style*="minmax(220px, 1fr)"] {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* ================================================================
+   COUNTDOWN SECTION — SPECIFIC RESPONSIVE RULES
+================================================================ */
+
+/* At 480px collapse the 2×2 countdown cards to a 2-col row each with equal height */
+@media (max-width: 480px) {
+  .countdown-layout .countdown-2x2 {
+    grid-template-columns: 1fr 1fr !important;
   }
 }
