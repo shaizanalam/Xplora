@@ -83,9 +83,9 @@ export default function IntroSplash({ onComplete }) {
 
       {/* Controls: Mute toggle & Enter button */}
       <div style={{
-        position: 'absolute', bottom: '2.5rem', right: 'var(--pad-x)',
-        display: 'flex', alignItems: 'center', gap: 12,
-        zIndex: 10000,
+        position: 'absolute', bottom: '2rem', right: 'var(--pad-x)', left: 'var(--pad-x)',
+        display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 10,
+        flexWrap: 'wrap', zIndex: 10000,
       }}>
         <button
           onClick={toggleSound}

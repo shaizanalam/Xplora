@@ -108,7 +108,7 @@ export default function HomePage() {
 
             <h1 className="fade-up-2" style={{
               fontFamily: 'var(--font-display)', fontWeight: 900,
-              fontSize: 'clamp(3.2rem, 9.5vw, 10.5rem)',
+              fontSize: 'clamp(2.4rem, 9.5vw, 10.5rem)',
               lineHeight: 0.88, letterSpacing: '-0.025em',
               textTransform: 'uppercase', marginBottom: '2rem',
             }}>

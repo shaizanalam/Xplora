@@ -55,8 +55,8 @@ canvas {
   --glow-lg:  0 0 35px rgba(255, 38, 136, 0.4), 0 0 70px rgba(229, 0, 106, 0.15);
 
   /* Spacing */
-  --pad-x:    clamp(1.5rem, 5vw, 6rem);
-  --space-section: clamp(5rem, 11vw, 10rem);
+  --pad-x:    clamp(1rem, 4vw, 6rem);
+  --space-section: clamp(3.5rem, 8vw, 10rem);
 
   /* Easing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -472,4 +472,68 @@ body { background: var(--black); overflow-x: hidden; }
     transition-duration: 0.01ms !important;
   }
   html { scroll-behavior: auto; }
+}
+
+/* ================================================================
+   MOBILE RESPONSIVENESS & TOUCH OPTIMIZATIONS (<900px & <640px)
+================================================================ */
+@media (max-width: 900px) {
+  html, body, button, a {
+    cursor: auto !important;
+  }
+
+  /* Force all 12-column grid containers to stack on mobile */
+  div[style*="repeat(12, 1fr)"],
+  div[style*="repeat(12,1fr)"] {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  /* Force grid column spans to full width on mobile */
+  div[style*="span 5"],
+  div[style*="span 7"],
+  div[style*="span 8"],
+  div[style*="span 4"] {
+    grid-column: span 1 !important;
+  }
+
+  /* Adjust border-left dividers to clean spacing on stacked mobile */
+  div[style*="borderLeft"],
+  div[style*="border-left"] {
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+
+  .hdr-cta {
+    display: none !important;
+  }
+
+  .hero-meta, .hero-res {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --pad-x: 1.25rem;
+    --space-section: 3.5rem;
+  }
+
+  /* Prevent title overflow on small phone screens */
+  h1, h2 {
+    word-break: break-word;
+  }
+
+  /* Full-width touch-friendly buttons */
+  .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.85rem 1.25rem !important;
+  }
+
+  /* Ensure card grids fit narrow viewports */
+  div[style*="minmax(290px, 1fr)"],
+  div[style*="minmax(220px, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
 }
