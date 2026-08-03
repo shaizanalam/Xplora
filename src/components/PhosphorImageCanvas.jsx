@@ -12,21 +12,28 @@ import React, { useRef, useEffect, useCallback } from 'react';
   8. Throttled resize with debounce
 */
 
-const GAP = 14;          // dot spacing — bigger = fewer, faster
-const GLOW_THRESHOLD = 0.55; // only render glow ring above this intensity
+const MAX_PARTICLES = 150;
+const CONNECTION_DISTANCE = 120;
+const MOUSE_RADIUS = 150;
 
-function buildDots(W, H) {
-  const cols = Math.floor(W / GAP);
-  const rows = Math.floor(H / GAP);
-  const dots = new Float32Array(cols * rows * 2);
-  let i = 0;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      dots[i++] = c * GAP + GAP * 0.5;
-      dots[i++] = r * GAP + GAP * 0.5;
-    }
+function createParticles(W, H, type) {
+  const count = Math.min(MAX_PARTICLES, Math.floor((W * H) / 9000));
+  const particles = [];
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+      radius: Math.random() * 2 + 1,
+      color: type === 'planet' 
+        ? (Math.random() > 0.5 ? '#e5006a' : '#ff2688')
+        : type === 'controller'
+          ? (Math.random() > 0.5 ? '#22d3ee' : '#06b6d4')
+          : (Math.random() > 0.5 ? '#e5006a' : '#22d3ee')
+    });
   }
-  return { dots, cols, rows };
+  return particles;
 }
 
 export default function PhosphorImageCanvas({
@@ -38,8 +45,16 @@ export default function PhosphorImageCanvas({
   const canvasRef   = useRef(null);
   const rafRef      = useRef(null);
   const visibleRef  = useRef(false);
-  const dotsRef     = useRef(null);
+  const particlesRef = useRef([]);
+  const mouseRef    = useRef({ x: -1000, y: -1000 });
   const timeRef     = useRef(0);
+  const imgRef      = useRef(null);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/claude.webp';
+    img.onload = () => { imgRef.current = img; };
+  }, []);
 
   const startLoop = useCallback(() => {
     const canvas = canvasRef.current;
@@ -52,79 +67,94 @@ export default function PhosphorImageCanvas({
       if (!visibleRef.current) { rafRef.current = null; return; }
       timeRef.current += prefersReduced ? 0 : 0.02;
       const t = timeRef.current;
-      const { dots, cols, rows } = dotsRef.current;
+      
       const W = canvas.width;
       const H = canvas.height;
+      const particles = particlesRef.current;
+      const mouse = mouseRef.current;
 
-      // Clear
+      // Clear with slight trailing effect for motion blur
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, W, H);
 
-      const total = cols * rows;
+      // Update and draw particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        
+        // Move
+        p.x += p.vx;
+        p.y += p.vy;
 
-      for (let i = 0; i < total; i++) {
-        const x = dots[i * 2];
-        const y = dots[i * 2 + 1];
-        let intensity = 0;
+        // Bounce
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        
+        // Mouse interaction (repel)
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MOUSE_RADIUS) {
+          const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+          p.x -= (dx / dist) * force * 2;
+          p.y -= (dy / dist) * force * 2;
+        }
 
-        if (type === 'controller') {
-          const dx = (x - W * 0.5) / (W * 0.35);
-          const dy = (y - H * 0.5) / (H * 0.35);
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const lh = Math.sqrt((dx + 0.5) ** 2 + (dy - 0.2) ** 2);
-          const rh = Math.sqrt((dx - 0.5) ** 2 + (dy - 0.2) ** 2);
-          const cb = Math.abs(dy) < 0.25 && Math.abs(dx) < 0.6;
-          if ((lh < 0.45 || rh < 0.45 || cb) && dist < 0.95) {
-            intensity = Math.sin(x * 0.05 + t) * 0.5 + 0.5;
-            if (Math.sin(y * 0.08 - t * 2) > 0.3) intensity = Math.min(1, intensity + 0.28);
-          }
-        } else if (type === 'planet') {
-          const dx = x - W * 0.5;
-          const dy = y - H * 0.5;
-          const r  = Math.min(W, H) * 0.35;
-          const d  = Math.sqrt(dx * dx + dy * dy);
-          if (d < r) {
-            intensity = Math.cos(d * 0.05 - t) * 0.5 + 0.5;
-            intensity += Math.sin(Math.atan2(dy, dx) * 6 + t * 0.2) * 0.22;
-          } else if (Math.abs(dy - Math.sin(dx * 0.02 + t) * 18) < 5) {
-            intensity = 0.75;
-          }
-        } else {
-          // grid
-          const w1 = Math.sin(x * 0.02 + t * 2) * 38;
-          const w2 = Math.cos(y * 0.03 - t) * 28;
-          if (Math.abs(y - H * 0.5 - w1) < 14 || Math.abs(x - W * 0.5 - w2) < 18) {
-            intensity = 0.88;
-          } else if (Math.random() < 0.06) {
-            intensity = 0.28;
+        // Draw connections
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx2 = p.x - p2.x;
+          const dy2 = p.y - p2.y;
+          const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+
+          if (dist2 < CONNECTION_DISTANCE) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            const alpha = 1 - (dist2 / CONNECTION_DISTANCE);
+            // Mix colors
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.15})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
           }
         }
 
-        if (intensity < 0.06) continue;
-
-        const radius = Math.max(0.8, Math.min(4.5, intensity * 4.2));
-
-        // Fake glow: draw a soft larger circle first (no shadowBlur needed)
-        if (intensity > GLOW_THRESHOLD) {
-          ctx.beginPath();
-          ctx.arc(x, y, radius * 2.2, 0, 6.2832);
-          ctx.fillStyle = `rgba(229,0,106,${(intensity - GLOW_THRESHOLD) * 0.18})`;
-          ctx.fill();
-        }
-
-        // Core dot
+        // Draw particle
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, 6.2832);
-        const alpha = Math.min(1, intensity * 0.88 + 0.12);
-        if (intensity > 0.65) {
-          ctx.fillStyle = `rgba(255,38,136,${alpha})`;
-        } else if (intensity > 0.35) {
-          ctx.fillStyle = `rgba(229,0,106,${alpha * 0.85})`;
-        } else {
-          ctx.fillStyle = `rgba(180,0,80,${alpha * 0.65})`;
-        }
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
         ctx.fill();
+        
+        // Add subtle glow
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+        ctx.globalAlpha = 0.2;
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
       }
+
+      // --- Draw Floating Image ---
+      const mX = W / 2;
+      const mY = H / 2;
+      const floatY = Math.sin(t * 1.5) * 12;
+      const tilt = Math.cos(t * 1.2) * 0.04;
+
+      ctx.save();
+      ctx.translate(mX, mY + floatY);
+      ctx.rotate(tilt);
+
+      if (imgRef.current) {
+        const iw = 110; 
+        const ih = (110 / imgRef.current.width) * imgRef.current.height;
+        
+        // Optional subtle glow behind the image
+        ctx.shadowColor = '#e5006a';
+        ctx.shadowBlur = 20;
+        
+        ctx.drawImage(imgRef.current, -iw/2, -ih/2, iw, ih);
+      }
+      
+      ctx.restore();
 
       if (!prefersReduced) {
         rafRef.current = requestAnimationFrame(loop);
@@ -132,7 +162,7 @@ export default function PhosphorImageCanvas({
     };
 
     rafRef.current = requestAnimationFrame(loop);
-  }, [type]);
+  }, []);
 
   const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -141,8 +171,8 @@ export default function PhosphorImageCanvas({
     const H = height;
     canvas.width  = W;
     canvas.height = H;
-    dotsRef.current = buildDots(W, H);
-  }, [height]);
+    particlesRef.current = createParticles(W, H, type);
+  }, [height, type]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -150,7 +180,6 @@ export default function PhosphorImageCanvas({
 
     initCanvas();
 
-    // Only animate when visible
     const observer = new IntersectionObserver(
       ([entry]) => {
         visibleRef.current = entry.isIntersecting;
@@ -160,7 +189,6 @@ export default function PhosphorImageCanvas({
     );
     observer.observe(canvas);
 
-    // Debounced resize
     let resizeTimer;
     const onResize = () => {
       clearTimeout(resizeTimer);
@@ -170,9 +198,25 @@ export default function PhosphorImageCanvas({
     };
     window.addEventListener('resize', onResize, { passive: true });
 
+    const onMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    };
+    const onMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+
+    canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('mouseleave', onMouseLeave);
+
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', onResize);
+      canvas.removeEventListener('mousemove', onMouseMove);
+      canvas.removeEventListener('mouseleave', onMouseLeave);
       if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
     };
   }, [initCanvas, startLoop]);
@@ -204,7 +248,7 @@ export default function PhosphorImageCanvas({
         border: '1px solid rgba(229,0,106,0.3)',
         pointerEvents: 'none',
       }}>
-        CANVAS // DOT-MATRIX
+        CANVAS // NEURAL-NET
       </div>
       <div style={{
         position: 'absolute', bottom: 10, right: 10,
@@ -213,7 +257,7 @@ export default function PhosphorImageCanvas({
         color: 'rgba(255,255,255,0.3)',
         pointerEvents: 'none',
       }}>
-        MONOCHROME PHOSPHOR
+        INTERACTIVE NEXUS
       </div>
     </div>
   );

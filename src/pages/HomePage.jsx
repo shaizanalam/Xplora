@@ -83,6 +83,7 @@ export default function HomePage() {
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 10, height: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '0 var(--pad-x)' }}>
 
+
           {/* Headline */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '7.5rem', paddingBottom: '2rem' }}>
 
@@ -116,136 +117,164 @@ export default function HomePage() {
       </div>
 
       {/* ══════════════════════════════════════
-          SECTION 03 — COUNTDOWN
+          SECTION 03 — COUNTDOWN (REDESIGNED)
       ══════════════════════════════════════ */}
-      <section id="countdown" style={{ width: '100%', background: '#000', padding: 'var(--space-section) var(--pad-x)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: 1600, margin: '0 auto' }}>
+      <section
+        id="countdown"
+        aria-label="Event countdown"
+        style={{ position: 'relative', width: '100%', background: '#000', padding: 'var(--space-section) var(--pad-x)', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}
+      >
+        {/* Subtle dot-matrix background to fill negative space intentionally */}
+        <div className="dot-matrix-bg" style={{ position: 'absolute', inset: 0, opacity: 0.10, pointerEvents: 'none' }} />
+        {/* Radial glow centered behind countdown grid — bridges the two columns visually */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 55% 70% at 65% 50%, rgba(229,0,106,0.07) 0%, transparent 75%)',
+        }} />
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: '4rem' }}>
-            <span style={{ width: 6, height: 6, background: 'var(--mag-200)', flexShrink: 0 }} />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--mag-400)' }}>
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1600, margin: '0 auto' }}>
+
+          {/* Section label — intentional design marker */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '3.5rem' }}>
+            <span style={{ width: 6, height: 6, background: 'var(--mag-200)', flexShrink: 0, borderRadius: 1 }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--mag-400)' }}>
               COUNTDOWN&nbsp;//&nbsp;002
             </span>
-            <span className="accent-line" style={{ flex: 1, maxWidth: 80 }} />
+            <span className="accent-line" style={{ flex: 1, maxWidth: 120 }} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(2rem,5vw,4rem)', alignItems: 'center' }}>
-            {/* Left: big label */}
-            <div style={{ gridColumn: 'span 5' }}>
+          {/* Two-column: left headline block + right 2×2 countdown grid */}
+          <div className="countdown-layout" style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 'clamp(2rem, 5vw, 5rem)',
+            alignItems: 'center',
+          }}>
+
+            {/* ── Left: headline + venue + CTA ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
               <h2 style={{
                 fontFamily: 'var(--font-display)', fontWeight: 900,
-                fontSize: 'clamp(2.5rem, 7vw, 8rem)',
-                lineHeight: 0.9, letterSpacing: '-0.022em',
+                fontSize: 'clamp(2.6rem, 6vw, 7.5rem)',
+                lineHeight: 0.92, letterSpacing: '-0.022em',
                 textTransform: 'uppercase', color: '#fff',
+                margin: 0,
               }}>
                 UNTIL<br />
                 <span className="glow-text" style={{ color: 'var(--mag-200)' }}>XPLORA</span><br />
                 BEGINS.
               </h2>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', marginTop: '1.25rem' }}>
-                NOV 13–14, 2026 &middot; Krishna Public School
-              </p>
+
+              {/* Date/venue — elevated weight so it reads clearly */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                <p style={{
+                  fontFamily: 'var(--font-display)', fontWeight: 700,
+                  fontSize: 'clamp(1rem, 1.8vw, 1.35rem)',
+                  letterSpacing: '0.04em', textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.92)', margin: 0,
+                }}>
+                  NOV 13–14, 2026
+                </p>
+                <p style={{
+                  fontFamily: 'var(--font-mono)', fontSize: 'clamp(0.7rem, 1vw, 0.82rem)',
+                  letterSpacing: '0.16em', textTransform: 'uppercase',
+                  color: 'var(--mag-400)', margin: 0,
+                }}>
+                  Krishna Public School&nbsp;&middot;&nbsp;Raipur, Chhattisgarh
+                </p>
+              </div>
+
+              {/* CTA — next step for the user */}
+              <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
+                <a href="/#/register" className="btn btn-solid" style={{ padding: '0.82rem 1.85rem', fontSize: '0.67rem' }}>
+                  REGISTER NOW ↗
+                </a>
+                <a href="/#/events" className="btn btn-outline" style={{ padding: '0.82rem 1.5rem', fontSize: '0.67rem' }}>
+                  VIEW EVENTS
+                </a>
+              </div>
             </div>
 
-            {/* Right: countdown digits */}
-            <div style={{ gridColumn: 'span 7', display: 'flex', gap: 'clamp(1rem,3vw,2.5rem)', flexWrap: 'wrap' }}>
-              {countdown.done ? (
-                <p style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(2rem, 6vw, 5rem)', color: 'var(--mag-200)', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
-                  THE EVENT HAS STARTED!
-                </p>
-              ) : (
-                [['DAYS', P2(countdown.d)], ['HOURS', P2(countdown.h)], ['MINS', P2(countdown.m)], ['SECS', P2(countdown.s)]].map(([label, val]) => (
-                  <div key={label} className="panel" style={{ padding: 'clamp(1.2rem,3vw,2rem) clamp(1.5rem,3.5vw,2.5rem)', textAlign: 'center', flex: '1 1 90px' }}>
+            {/* ── Right: 2×2 equal countdown grid ── */}
+            {countdown.done ? (
+              <p style={{
+                fontFamily: 'var(--font-display)', fontWeight: 900,
+                fontSize: 'clamp(2rem, 6vw, 5rem)',
+                color: 'var(--mag-200)', letterSpacing: '-0.02em',
+                textTransform: 'uppercase', margin: 0,
+              }}>
+                THE EVENT HAS STARTED!
+              </p>
+            ) : (
+              <div
+                role="timer"
+                aria-live="off"
+                aria-label={`${countdown.d} days, ${countdown.h} hours, ${countdown.m} minutes, ${countdown.s} seconds remaining`}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 'clamp(0.6rem, 1.5vw, 1rem)',
+                }}
+              >
+                {[
+                  { label: 'DAYS',  val: P2(countdown.d),  aria: `${countdown.d} days` },
+                  { label: 'HOURS', val: P2(countdown.h),  aria: `${countdown.h} hours` },
+                  { label: 'MINS',  val: P2(countdown.m),  aria: `${countdown.m} minutes` },
+                  { label: 'SECS',  val: P2(countdown.s),  aria: `${countdown.s} seconds` },
+                ].map(({ label, val, aria }) => (
+                  <div
+                    key={label}
+                    aria-label={aria}
+                    className="panel"
+                    style={{
+                      padding: 'clamp(1.25rem, 2.5vw, 2.25rem) clamp(1rem, 2vw, 1.75rem)',
+                      textAlign: 'center',
+                      background: 'rgba(229,0,106,0.03)',
+                      border: '1px solid rgba(229,0,106,0.15)',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                      gap: '0.55rem',
+                    }}
+                  >
+                    {/* Fixed-width container prevents layout shift as digit count changes */}
                     <div style={{
                       fontFamily: 'var(--font-display)', fontWeight: 900,
-                      fontSize: 'clamp(2.5rem, 7vw, 7rem)',
+                      fontSize: 'clamp(2.8rem, 6vw, 6rem)',
                       lineHeight: 1, color: 'var(--mag-200)',
-                      textShadow: '0 0 30px rgba(229,0,106,0.65), 0 0 80px rgba(229,0,106,0.25)',
-                      letterSpacing: '0.02em',
-                    }}>{val}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginTop: '0.65rem' }}>{label}</div>
+                      textShadow: '0 0 28px rgba(229,0,106,0.6), 0 0 70px rgba(229,0,106,0.2)',
+                      letterSpacing: '0.04em',
+                      minWidth: '2.5ch', display: 'inline-block',
+                      fontVariantNumeric: 'tabular-nums',
+                    }}>
+                      {val}
+                    </div>
+                    <div style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '0.62rem',
+                      letterSpacing: '0.28em', textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.45)',
+                      borderTop: '1px solid rgba(255,255,255,0.06)',
+                      paddingTop: '0.5rem', width: '100%', textAlign: 'center',
+                    }}>
+                      {label}
+                    </div>
                   </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          SECTION 04 — ABOUT (MANIFESTO STYLE)
-      ══════════════════════════════════════ */}
-      <section id="about" style={{ position: 'relative', width: '100%', background: '#000', padding: 'var(--space-section) var(--pad-x)', overflow: 'hidden' }}>
-        <div className="dot-matrix-bg" style={{ position: 'absolute', inset: 0, opacity: 0.16, pointerEvents: 'none' }} />
-
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1600, margin: '0 auto' }}>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: '4.5rem' }}>
-            <span style={{ width: 6, height: 6, background: 'var(--mag-200)', flexShrink: 0 }} />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--mag-400)' }}>ABOUT&nbsp;//&nbsp;003</span>
-            <span className="accent-line" style={{ flex: 1, maxWidth: 80 }} />
-          </div>
-
-          {/* Grid layout balancing text statement on left with visual canvas & manifesto text on right */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(2rem,4vw,4rem)', alignItems: 'center' }}>
-            <div style={{ gridColumn: 'span 7' }}>
-              <h2 style={{
-                fontFamily: 'var(--font-display)', fontWeight: 900,
-                fontSize: 'clamp(2.8rem, 6.5vw, 7.5rem)',
-                lineHeight: 0.9, letterSpacing: '-0.025em',
-                textTransform: 'uppercase', color: '#fff',
-              }}>
-                TECH IS<br />
-                <span className="glow-text" style={{ color: 'var(--mag-200)' }}>NO LONGER</span><br />
-                A SUBJECT.<br />
-                <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85em' }}>IT IS THE <span style={{ borderBottom: '2px solid var(--mag-200)' }}>ECOSYSTEM.</span></span>
-              </h2>
-            </div>
-
-            <div style={{ gridColumn: 'span 5', display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-              <div style={{ border: '1px solid rgba(225, 29, 72, 0.2)', borderRadius: 12, overflow: 'hidden' }}>
-                <PhosphorImageCanvas type="planet" height={260} />
+                ))}
               </div>
-              <div style={{ borderLeft: '2px solid var(--mag-200)', paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.9rem, 1.2vw, 1.02rem)', lineHeight: 1.65, color: 'rgba(255,255,255,0.85)' }}>
-                  Xplora Techfest is a premier technology festival that brings together innovators, tech enthusiasts, and industry leaders to explore the latest advancements in technology.
-                </p>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.88rem, 1.1vw, 0.98rem)', lineHeight: 1.65, color: 'rgba(255,255,255,0.68)' }}>
-                  Two days of inspiring talks, hands-on workshops, thrilling competitions, and networking opportunities — for students, professionals, and curious minds.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats row — well-spaced across 4 columns */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginTop: 'clamp(3.5rem,6vw,5rem)' }}>
-            {[
-              { val: '2', label: 'DAYS OF FEST', sub: 'Nov 13–14, 2026' },
-              { val: '12+', label: 'COMPETITIONS', sub: 'Digital & Robotics' },
-              { val: '500+', label: 'ATTENDEES', sub: 'Students & Techs' },
-              { val: '∞', label: 'INNOVATION', sub: 'Endless Scope' },
-            ].map(({ val, label, sub }) => (
-              <div key={label} className="panel" style={{ padding: '1.75rem 1.5rem', textAlign: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(2.5rem, 4vw, 3.8rem)', lineHeight: 1, color: 'var(--mag-200)', textShadow: '0 0 20px rgba(229,0,106,0.5)' }}>{val}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ffffff', marginTop: 10 }}>{label}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.65)', marginTop: 4 }}>{sub}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Bottom annotation */}
-          <div style={{ marginTop: 'clamp(4rem,8vw,7rem)', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)' }}>
-            <span>03 / 06&nbsp;—&nbsp;ABOUT XPLORA</span>
-            <span className="about-mid">Krishna Public School&nbsp;::&nbsp;RAIPUR, CHHATTISGARH</span>
-            <span>TECHFEST&nbsp;//&nbsp;ANNUAL</span>
+            )}
           </div>
         </div>
 
-        <style>{`.about-mid { display: none; } @media (min-width: 640px) { .about-mid { display: inline; } }`}</style>
+        {/* Responsive stacking styles */}
+        <style>{`
+          @media (max-width: 860px) {
+            .countdown-layout {
+              grid-template-columns: 1fr !important;
+            }
+          }
+        `}</style>
       </section>
 
       {/* ══════════════════════════════════════
-          SECTION 05 — EVENTS PREVIEW
+          SECTION 04 — EVENTS PREVIEW
       ══════════════════════════════════════ */}
       <section style={{ width: '100%', background: '#000', padding: 'var(--space-section) var(--pad-x)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: 1600, margin: '0 auto' }}>
@@ -253,7 +282,7 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '2rem', alignItems: 'end', marginBottom: '4rem' }}>
             <div style={{ gridColumn: 'span 7' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--mag-400)', marginBottom: '1.25rem' }}>
-                EVENT CATALOGUE&nbsp;//&nbsp;004
+                EVENT CATALOGUE&nbsp;//&nbsp;003
               </p>
               <h2 style={{
                 fontFamily: 'var(--font-display)', fontWeight: 900,
@@ -362,10 +391,10 @@ export default function HomePage() {
             padding: '1.5rem 2rem',
           }}>
             Don't miss out. Compete, collaborate, create. Xplora Techfest brings the brightest minds together
-            for Pakistan's most exciting technology festival.
+            for Chhattisgarh's most exciting technology festival.
           </p>
 
-          <a href="/#/contact" className="btn btn-solid" style={{ padding: '1.1rem 3rem', fontSize: '0.75rem' }}>
+          <a href="/#/register" className="btn btn-solid" style={{ padding: '1.1rem 3rem', fontSize: '0.75rem' }}>
             REGISTER NOW ↗
           </a>
         </div>

@@ -41,6 +41,8 @@ canvas {
   --mag-200:  #e5006a;   /* Primary — slightly cooler, more elegant */
   --mag-100:  #ff2688;   /* Bright phosphor */
   --mag-50:   #ff5aaa;   /* Light pink */
+  --cyan-400: #22d3ee;
+  --cyan-500: #06b6d4;
 
   /* Typography */
   --font-display: 'Antonio', sans-serif;
@@ -77,7 +79,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  cursor: none;
+  cursor: auto;
 }
 body { background: var(--black); overflow-x: hidden; }
 
@@ -175,6 +177,8 @@ body { background: var(--black); overflow-x: hidden; }
 .text-mag        { color: var(--mag-200); }
 .text-mag-bright { color: var(--mag-100); }
 .text-mag-dim    { color: var(--mag-400); } /* WCAG AA 7.1:1 */
+.text-cyan       { color: var(--cyan-400); }
+.text-cyan-dim   { color: var(--cyan-500); }
 .text-white-dim  { color: rgba(255,255,255,0.75); } /* WCAG AA 10.5:1 against black */
 .text-white-faint{ color: rgba(255,255,255,0.65); } /* WCAG AA 7.8:1 against black */
 
@@ -558,8 +562,8 @@ body { background: var(--black); overflow-x: hidden; }
     word-break: break-word;
   }
 
-  /* Full-width touch-friendly buttons */
-  .btn {
+  /* Full-width touch-friendly buttons — exclude countdown CTAs which sit side-by-side */
+  .btn:not(.countdown-cta) {
     width: 100% !important;
     justify-content: center !important;
     padding: 0.85rem 1.25rem !important;
@@ -569,5 +573,16 @@ body { background: var(--black); overflow-x: hidden; }
   div[style*="minmax(290px, 1fr)"],
   div[style*="minmax(220px, 1fr)"] {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* ================================================================
+   COUNTDOWN SECTION — SPECIFIC RESPONSIVE RULES
+================================================================ */
+
+/* At 480px collapse the 2×2 countdown cards to a 2-col row each with equal height */
+@media (max-width: 480px) {
+  .countdown-layout .countdown-2x2 {
+    grid-template-columns: 1fr 1fr !important;
   }
 }
