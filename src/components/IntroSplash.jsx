@@ -94,7 +94,7 @@ export default function IntroSplash({ onComplete }) {
 
       {/* Skip control button */}
       <div style={{
-        position: 'absolute', bottom: '6rem', right: 'var(--pad-x)',
+        position: 'absolute', bottom: '4.5rem', right: 'var(--pad-x)',
         zIndex: 10000,
         background: '#000', /* Solid black wrapper to hide the logo behind it */
         display: 'inline-block'
@@ -103,7 +103,7 @@ export default function IntroSplash({ onComplete }) {
           onClick={handleFinish}
           className="btn btn-solid"
           style={{
-            padding: '1.2rem 2.5rem', fontSize: '0.8rem',
+            padding: '1.8rem 3rem', fontSize: '0.85rem',
             boxShadow: 'var(--glow-md)',
           }}
         >
