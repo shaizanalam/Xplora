@@ -94,15 +94,17 @@ export default function IntroSplash({ onComplete }) {
 
       {/* Skip control button */}
       <div style={{
-        position: 'absolute', bottom: '2rem', right: 'var(--pad-x)',
+        position: 'absolute', bottom: '3.5rem', right: 'var(--pad-x)',
         zIndex: 10000,
       }}>
         <button
           onClick={handleFinish}
           className="btn btn-solid"
           style={{
-            padding: '0.75rem 1.8rem', fontSize: '0.68rem',
+            padding: '1.2rem 2.5rem', fontSize: '0.8rem',
             boxShadow: 'var(--glow-md)',
+            background: '#000', // Solid black to hide the logo behind it
+            border: '2px solid var(--mag-500)', // Keep the magenta border
           }}
         >
           ENTER XPLORA ↗

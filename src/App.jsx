@@ -198,6 +198,8 @@ function Header() {
 function Footer() {
   const FOOT_NAV = ['HOME', 'EVENTS', 'CONTACT'];
   const FOOT_TO = ['/', '/events', '/contact'];
+  const FOOT_ABOUT = ['SCHEDULE', 'SPEAKERS', 'SPONSORS', 'TEAM', 'FAQ'];
+  const FOOT_ABOUT_TO = ['/schedule', '/speakers', '/sponsors', '/team', '/faq'];
   const TOP_EVENTS = ['HACKATHON', 'CODE WARS', 'ROBO DANGAL', 'AI TALKS', 'GAMING', 'VR'];
 
   return (
