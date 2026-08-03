@@ -19,14 +19,14 @@ function ScrollReset() {
    HEADER
 ───────────────────────────── */
 const NAV = [
-  { label: 'HOME',    to: '/'        },
-  { label: 'EVENTS',  to: '/events'  },
+  { label: 'HOME', to: '/' },
+  { label: 'EVENTS', to: '/events' },
   { label: 'CONTACT', to: '/contact' },
 ];
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [open,     setOpen]     = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 55);
@@ -81,7 +81,7 @@ function Header() {
                   fontFamily: 'var(--font-mono)', fontSize: '0.63rem',
                   letterSpacing: '0.22em', textTransform: 'uppercase',
                   textDecoration: 'none',
-                  color: isActive ? 'var(--mag-200)' : 'rgba(255,255,255,0.5)',
+                  color: isActive ? 'var(--mag-200)' : 'rgba(255,255,255,0.85)',
                   transition: 'color 0.2s',
                   paddingBottom: 2,
                 })}
@@ -189,8 +189,8 @@ function Header() {
    FOOTER
 ───────────────────────────── */
 function Footer() {
-  const FOOT_NAV   = ['HOME', 'EVENTS', 'CONTACT'];
-  const FOOT_TO    = ['/', '/events', '/contact'];
+  const FOOT_NAV = ['HOME', 'EVENTS', 'CONTACT'];
+  const FOOT_TO = ['/', '/events', '/contact'];
   const TOP_EVENTS = ['HACKATHON', 'CODE WARS', 'ROBO DANGAL', 'AI TALKS', 'GAMING', 'VR'];
 
   return (
@@ -208,7 +208,7 @@ function Footer() {
         }}>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--mag-500)', marginBottom: '1.75rem' }}>
-              XPLORA TECHFEST 6.0&nbsp;//&nbsp;KPS COLLEGE
+              XPLORA TECHFEST 6.0&nbsp;//&nbsp;KPS
             </p>
             <h2 style={{
               fontFamily: 'var(--font-display)', fontWeight: 900,
@@ -227,7 +227,7 @@ function Footer() {
 
         {/* Four-column links */}
         <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(175px, 1fr))',
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: 'clamp(2rem,4vw,3.5rem)',
           padding: 'clamp(3rem,6vw,4.5rem) 0',
           borderBottom: '1px solid rgba(255,255,255,0.05)',
@@ -237,11 +237,11 @@ function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span className="live-dot" />
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '1.05rem', letterSpacing: '0.2em', color: 'var(--mag-200)', textTransform: 'uppercase' }}
-                    className="glow-text">
+                className="glow-text">
                 XPLORA
               </span>
             </div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.85rem, 1vw, 0.95rem)', lineHeight: 1.6, color: 'rgba(255,255,255,0.5)', maxWidth: 220 }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.85rem, 1vw, 0.95rem)', lineHeight: 1.6, color: 'rgba(255,255,255,0.75)', maxWidth: 240 }}>
               A premier technology festival bringing together innovators, enthusiasts, and industry leaders.
             </p>
           </div>
@@ -265,9 +265,9 @@ function Footer() {
               //&nbsp;TOP EVENTS
             </p>
             {TOP_EVENTS.map(ev => (
-              <NavLink key={ev} to="/events" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.69rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s' }}
+              <NavLink key={ev} to="/events" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.69rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = 'var(--mag-200)'}
-                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.38)'}
+                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.78)'}
               >{ev}</NavLink>
             ))}
           </div>
@@ -282,13 +282,13 @@ function Footer() {
             </a>
             {[
               { l: 'INSTAGRAM', h: 'https://www.instagram.com/xplora.kps/' },
-              { l: 'LINKEDIN',  h: 'https://www.linkedin.com/company/techfest-xplora/' },
-              { l: 'YOUTUBE',   h: 'https://www.youtube.com/@atlclubkps/videos' },
+              { l: 'LINKEDIN', h: 'https://www.linkedin.com/company/techfest-xplora/' },
+              { l: 'YOUTUBE', h: 'https://www.youtube.com/@atlclubkps/videos' },
             ].map(({ l, h }) => (
               <a key={l} href={h} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.69rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s' }}
+                style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.69rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = '#fff'}
-                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.38)'}
+                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.78)'}
               >{l}&nbsp;↗</a>
             ))}
           </div>
@@ -300,14 +300,14 @@ function Footer() {
           padding: '1.5rem 0',
           fontFamily: 'var(--font-mono)', fontSize: '0.54rem',
           letterSpacing: '0.18em', textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.17)',
+          color: 'rgba(255,255,255,0.75)',
         }}>
-          <span>XPLORA TECHFEST&nbsp;//&nbsp;KPS COLLEGE</span>
-          <span>© 2026&nbsp;ALL RIGHTS RESERVED</span>
-          <span>PHOSPHOR ENGINE&nbsp;//&nbsp;v4.2</span>
-        </div>
+          <span>XPLORA TECHFEST&nbsp;//&nbsp;KRISHNA PUBLIC SCHOOL</span>
+        <span>© 2026&nbsp;ALL RIGHTS RESERVED</span>
+        <span>PHOSPHOR ENGINE&nbsp;//&nbsp;v4.2</span>
       </div>
-    </footer>
+    </div>
+    </footer >
   );
 }
 
@@ -339,8 +339,8 @@ export default function App() {
 
         <main>
           <Routes>
-            <Route path="/"        element={<HomePage />}    />
-            <Route path="/events"  element={<EventsPage />}  />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/events" element={<EventsPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>

@@ -46,9 +46,11 @@ export default function PhosphorImageCanvas({
     if (!canvas) return;
     const ctx = canvas.getContext('2d', { alpha: false });
 
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const loop = () => {
       if (!visibleRef.current) { rafRef.current = null; return; }
-      timeRef.current += 0.02;
+      timeRef.current += prefersReduced ? 0 : 0.02;
       const t = timeRef.current;
       const { dots, cols, rows } = dotsRef.current;
       const W = canvas.width;
@@ -124,7 +126,9 @@ export default function PhosphorImageCanvas({
         ctx.fill();
       }
 
-      rafRef.current = requestAnimationFrame(loop);
+      if (!prefersReduced) {
+        rafRef.current = requestAnimationFrame(loop);
+      }
     };
 
     rafRef.current = requestAnimationFrame(loop);

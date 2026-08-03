@@ -21,10 +21,15 @@ export default function IntroSplash({ onComplete }) {
   };
 
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      onComplete();
+      return;
+    }
+
     if (videoRef.current) {
       videoRef.current.muted = false;
       videoRef.current.play().catch(() => {
-        // If browser blocks unmuted autoplay, fallback to muted so video plays automatically
         if (videoRef.current) {
           videoRef.current.muted = true;
           setMuted(true);
@@ -32,7 +37,7 @@ export default function IntroSplash({ onComplete }) {
         }
       });
     }
-  }, []);
+  }, [onComplete]);
 
   return (
     <div style={{
@@ -65,40 +70,11 @@ export default function IntroSplash({ onComplete }) {
       <div className="crt-overlay" />
       <div className="noise-overlay" />
 
-      {/* Top brand indicator */}
+      {/* Skip control button */}
       <div style={{
-        position: 'absolute', top: '2rem', left: 'var(--pad-x)',
-        display: 'flex', alignItems: 'center', gap: 10,
-        pointerEvents: 'none',
+        position: 'absolute', bottom: '2rem', right: 'var(--pad-x)',
+        zIndex: 10000,
       }}>
-        <span className="live-dot" />
-        <span style={{
-          fontFamily: 'var(--font-display)', fontWeight: 900,
-          fontSize: '0.9rem', letterSpacing: '0.2em', color: '#fff',
-          textTransform: 'uppercase',
-        }}>
-          XPLORA<span style={{ color: 'var(--mag-200)' }}>//</span>INTRO PROTOCOL
-        </span>
-      </div>
-
-      {/* Controls: Mute toggle & Enter button */}
-      <div style={{
-        position: 'absolute', bottom: '2rem', right: 'var(--pad-x)', left: 'var(--pad-x)',
-        display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 10,
-        flexWrap: 'wrap', zIndex: 10000,
-      }}>
-        <button
-          onClick={toggleSound}
-          className="btn btn-ghost"
-          style={{
-            padding: '0.65rem 1.2rem', fontSize: '0.62rem',
-            background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
-            borderColor: 'rgba(255,255,255,0.15)',
-          }}
-        >
-          {muted ? '🔊 UNMUTE' : '🔇 MUTE'}
-        </button>
-
         <button
           onClick={handleFinish}
           className="btn btn-solid"
@@ -109,16 +85,6 @@ export default function IntroSplash({ onComplete }) {
         >
           ENTER XPLORA ↗
         </button>
-      </div>
-
-      {/* Bottom status line */}
-      <div style={{
-        position: 'absolute', bottom: '2.5rem', left: 'var(--pad-x)',
-        fontFamily: 'var(--font-mono)', fontSize: '0.58rem',
-        letterSpacing: '0.2em', textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.35)', pointerEvents: 'none',
-      }}>
-        INITIALIZING SYSTEM MATRIX...
       </div>
     </div>
   );
