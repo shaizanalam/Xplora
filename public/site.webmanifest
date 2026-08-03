@@ -1,0 +1,16 @@
+{
+  "name": "XPLORA 2026 — Official Techfest & Gaming Festival",
+  "short_name": "XPLORA",
+  "description": "Official website of XPLORA 2026 — Premier techfest and gaming festival by Krishna Public School.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff007a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

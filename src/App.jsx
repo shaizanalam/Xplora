@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { HashRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import IntroSplash from './components/IntroSplash';
+import SEO from './components/SEO';
 import HomePage from './pages/HomePage';
 import EventsPage from './pages/EventsPage';
 import ContactPage from './pages/ContactPage';
@@ -352,6 +353,7 @@ export default function App() {
 
   return (
     <Router>
+      <SEO />
       <div style={{ background: '#000', minHeight: '100vh', userSelect: 'none' }}>
         {showIntro && <IntroSplash onComplete={() => setShowIntro(false)} />}
         <div ref={progressRef} className="scroll-indicator" aria-hidden="true" />

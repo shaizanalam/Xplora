@@ -1,0 +1,6 @@
+# Allow all major search engine web crawlers
+User-agent: *
+Allow: /
+
+# Direct links to XML Sitemap
+Sitemap: https://xplorakps.tech/sitemap.xml
