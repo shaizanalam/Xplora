@@ -55,7 +55,7 @@ export default function EventsPage() {
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', marginBottom: '1.25rem' }}>
                 12 competitions across digital, robotics, creative, physical, and knowledge disciplines. Two days. Unlimited ambition.
               </p>
-              <div style={{ display: 'flex', gap: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)' }}>
+              <div style={{ display: 'flex', gap: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)' }}>
                 <span>{EVENTS.length}&nbsp;EVENTS</span>
                 <span>NOV 13–14</span>
               </div>
@@ -132,7 +132,7 @@ export default function EventsPage() {
                   marginBottom: '0.35rem',
                   transition: 'color 0.28s',
                 }}>{ev.name}</h3>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>{ev.tag}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--mag-100)' }}>{ev.tag}</span>
               </div>
 
               {/* Description */}
@@ -212,8 +212,8 @@ export default function EventsPage() {
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.75rem', marginTop: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 {[['EVENTS', '12+'], ['DAYS', '2'], ['DISCIPLINES', '6'], ['PRIZES', 'MULTIPLE']].map(([k, v]) => (
                   <div key={k}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 4 }}>{k}</div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)', color: k === 'EVENTS' ? 'var(--cyan-400)' : '#fff', lineHeight: 1, textShadow: k === 'EVENTS' ? '0 0 16px rgba(34,211,238,0.4)' : 'none' }}>{v}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', marginBottom: 4 }}>{k}</div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)', color: k === 'EVENTS' ? 'var(--mag-200)' : '#fff', lineHeight: 1 }}>{v}</div>
                   </div>
                 ))}
               </div>

@@ -54,10 +54,11 @@ export default function PhosphorImageCanvas({
     if (!canvas) return;
     const ctx = canvas.getContext('2d', { alpha: false });
 
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const loop = () => {
       if (!visibleRef.current) { rafRef.current = null; return; }
-      
-      timeRef.current += 0.016;
+      timeRef.current += prefersReduced ? 0 : 0.02;
       const t = timeRef.current;
       
       const W = canvas.width;
@@ -220,18 +221,11 @@ export default function PhosphorImageCanvas({
         ctx.fill();
       }
 
-      // Cheek blushes
-      ctx.beginPath();
-      ctx.arc(-eyeSpacing - 8, 8, 4, 0, Math.PI * 2);
-      ctx.arc(eyeSpacing + 8, 8, 4, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(229, 0, 106, 0.4)';
-      ctx.shadowColor = '#e5006a';
-      ctx.shadowBlur = 8;
-      ctx.fill();
-
       ctx.restore();
 
-      rafRef.current = requestAnimationFrame(loop);
+      if (!prefersReduced) {
+        rafRef.current = requestAnimationFrame(loop);
+      }
     };
 
     rafRef.current = requestAnimationFrame(loop);

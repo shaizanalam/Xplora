@@ -34,10 +34,10 @@ canvas {
   --mag-900:  #0a0006;
   --mag-800:  #140009;
   --mag-700:  #200010;
-  --mag-600:  #330018;
-  --mag-500:  #550029;
-  --mag-400:  #7a003b;
-  --mag-300:  #aa0052;
+  --mag-600:  #b80058;   /* Visible border/badge contrast */
+  --mag-500:  #ff3388;   /* High contrast (WCAG 6.2:1 against #000) */
+  --mag-400:  #ff4d9d;   /* High contrast (WCAG 7.1:1 against #000) */
+  --mag-300:  #ff66ad;   /* High contrast secondary */
   --mag-200:  #e5006a;   /* Primary — slightly cooler, more elegant */
   --mag-100:  #ff2688;   /* Bright phosphor */
   --mag-50:   #ff5aaa;   /* Light pink */
@@ -105,6 +105,12 @@ body { background: var(--black); overflow-x: hidden; }
   letter-spacing: -0.025em;
   text-transform: uppercase;
 }
+@media (max-width: 640px) {
+  .text-hero {
+    font-size: clamp(3.2rem, 14vw, 5.2rem) !important;
+    line-height: 0.92 !important;
+  }
+}
 
 .text-headline {
   font-family: var(--font-display);
@@ -170,11 +176,11 @@ body { background: var(--black); overflow-x: hidden; }
 ================================================================ */
 .text-mag        { color: var(--mag-200); }
 .text-mag-bright { color: var(--mag-100); }
-.text-mag-dim    { color: var(--mag-500); }
+.text-mag-dim    { color: var(--mag-400); } /* WCAG AA 7.1:1 */
 .text-cyan       { color: var(--cyan-400); }
 .text-cyan-dim   { color: var(--cyan-500); }
-.text-white-dim  { color: rgba(255,255,255,0.55); }
-.text-white-faint{ color: rgba(255,255,255,0.3); }
+.text-white-dim  { color: rgba(255,255,255,0.75); } /* WCAG AA 10.5:1 against black */
+.text-white-faint{ color: rgba(255,255,255,0.65); } /* WCAG AA 7.8:1 against black */
 
 /* ================================================================
    GLOW TEXT
@@ -469,13 +475,41 @@ body { background: var(--black); overflow-x: hidden; }
   transition: height 0.08s linear;
 }
 
+/* ================================================================
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+================================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
   }
-  html { scroll-behavior: auto; }
+  html { scroll-behavior: auto !important; }
+
+  /* Disable CRT scanlines, beams, noise and flickers */
+  .crt-scanlines,
+  .crt-overlay,
+  .noise-overlay,
+  .scanline-beam {
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Disable text glows and marquee/pulsing animations */
+  .glow-text, .glow-text-lg {
+    text-shadow: none !important;
+  }
+
+  .animate-flicker,
+  .animate-marquee,
+  .live-dot::before {
+    animation: none !important;
+  }
+
+  /* Instant panel transitions */
+  .panel, .btn, .nav-link {
+    transition: none !important;
+  }
 }
 
 /* ================================================================

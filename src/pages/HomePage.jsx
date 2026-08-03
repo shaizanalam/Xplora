@@ -83,102 +83,18 @@ export default function HomePage() {
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 10, height: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '0 var(--pad-x)' }}>
 
-          {/* Top bar */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', paddingTop: '8.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', flexWrap: 'wrap', gap: '1.5rem' }}>
-            <div className="tag-badge fade-up-1" style={{ background: 'rgba(0,0,0,0.55)' }}>
-              <span className="live-dot" style={{ width: 5, height: 5 }} />
-              XPLORA TECHFEST&nbsp;<span style={{ color: 'rgba(255,255,255,0.28)' }}>//&nbsp;NOV 13–14, 2026</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-              {[['SECTOR', '07'], ['EVENTS', '12+'], ['STATUS', 'OPEN']].map(([k, v]) => (
-                <div key={k} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.4)', display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span style={{ color: 'var(--mag-500)', fontSize: '0.5rem' }}>{k}</span>
-                  <span style={{ color: 'var(--cyan-400)', fontWeight: 700, textShadow: '0 0 8px rgba(34,211,238,0.4)' }}>{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* Headline */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '1rem', paddingBottom: '2rem' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '7.5rem', paddingBottom: '2rem' }}>
 
-            <p className="fade-up-1" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--mag-500)', marginBottom: '1.75rem' }}>
-              KPS COLLEGE&nbsp;//&nbsp;ANNUAL TECHNOLOGY FESTIVAL
-            </p>
-
-            <h1 className="fade-up-2" style={{
-              fontFamily: 'var(--font-display)', fontWeight: 900,
-              fontSize: 'clamp(2.4rem, 9.5vw, 10.5rem)',
-              lineHeight: 0.88, letterSpacing: '-0.025em',
-              textTransform: 'uppercase', marginBottom: '2rem',
-            }}>
+            <h1 className="fade-up-2 text-hero" style={{ marginBottom: 0 }}>
               <span style={{ display: 'block', color: '#fff', textShadow: '0 4px 30px rgba(0,0,0,0.8)' }}>XPLORA</span>
               <span style={{ display: 'block', color: 'transparent', WebkitTextStroke: '1.5px rgba(255,255,255,0.5)', textShadow: 'none' }}>TECHFEST</span>
-              <span className="glow-text-lg" style={{ display: 'block', color: 'var(--mag-200)' }}>6.0.</span>
+              <span className="glow-text-lg" style={{ display: 'block', color: 'var(--mag-200)' }}>6.0</span>
             </h1>
 
-            <p className="fade-up-3" style={{
-              maxWidth: 440, fontFamily: 'var(--font-sans)',
-              fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.6,
-              color: 'rgba(255,255,255,0.7)',
-              marginBottom: '2.75rem',
-              paddingLeft: '1.25rem', borderLeft: '2px solid rgba(229,0,106,0.5)',
-            }}>
-              Welcome to the future of&nbsp;
-              <span style={{ color: '#fff', fontWeight: 600 }}>{scrambled}</span>.&nbsp;
-              Join us for two days of innovation, competition, and discovery.
-            </p>
-
-            <div className="fade-up-4" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-              <a href="#about" className="btn btn-solid">EXPLORE XPLORA →</a>
-              <a href="#" className="btn btn-outline" onClick={(e) => { e.preventDefault(); alert('Itinerary coming soon!'); }} style={{ opacity: 0.5 }}>ITINERARY (SOON) ↗</a>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            paddingTop: '1rem', paddingBottom: '2.5rem',
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            fontFamily: 'var(--font-mono)', fontSize: '0.57rem',
-            letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.26)', flexWrap: 'wrap', gap: 8,
-          }}>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-              <span>PLAYER_001&nbsp;//&nbsp;REGISTRATION OPEN</span>
-              <span className="hero-res">EVENTS&nbsp;//&nbsp;12 COMPETITIONS</span>
-            </div>
-            <a href="#countdown" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.38)', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'var(--mag-200)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.38)'}
-            >
-              SCROLL TO INITIATE&nbsp;<span style={{ color: 'var(--mag-200)' }}>↓</span>
-            </a>
           </div>
         </div>
-
-        <style>{`
-          .hero-res  { display: none; }
-          @media (min-width: 640px) { .hero-res { display: inline; } }
-          
-          /* Countdown Grid */
-          .countdown-grid {
-            grid-column: span 12;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-          }
-          @media (max-width: 768px) {
-            .countdown-grid {
-              grid-template-columns: repeat(2, 1fr);
-            }
-          }
-          @media (min-width: 1024px) {
-            .countdown-grid {
-              grid-column: span 7;
-            }
-          }
-        `}</style>
       </section>
 
       {/* ══════════════════════════════════════
@@ -228,7 +144,7 @@ export default function HomePage() {
                 BEGINS.
               </h2>
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', marginTop: '1.25rem' }}>
-                NOV 13–14, 2026 &middot; KPS COLLEGE
+                NOV 13–14, 2026 &middot; Krishna Public School
               </p>
             </div>
 
@@ -271,89 +187,57 @@ export default function HomePage() {
             <span className="accent-line" style={{ flex: 1, maxWidth: 80 }} />
           </div>
 
-          {/* Giant statement and visual */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '3rem' }}>
-            <h2 style={{
-              fontFamily: 'var(--font-display)', fontWeight: 900,
-              fontSize: 'clamp(2.8rem, 8.5vw, 10rem)',
-              lineHeight: 0.88, letterSpacing: '-0.025em',
-              textTransform: 'uppercase', color: '#fff',
-              flex: '1 1 500px',
-            }}>
-              TECH IS<br />
-              <span className="glow-text" style={{ color: 'var(--mag-200)' }}>NO LONGER</span><br />
-              A SUBJECT.
-            </h2>
-
-            <div className="about-visual" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', opacity: 0.8, paddingTop: '1rem' }}>
-              <div style={{ position: 'relative', width: 140, height: 140 }}>
-                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', animation: 'spin-slow 20s linear infinite' }}>
-                  <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(229,0,106,0.4)" strokeWidth="1" strokeDasharray="4 6" />
-                  <circle cx="50" cy="50" r="28" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-                  <circle cx="50" cy="50" r="18" fill="none" stroke="rgba(229,0,106,0.2)" strokeWidth="1" strokeDasharray="2 4" />
-                  <path d="M 50 2 L 50 98 M 2 50 L 98 50" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
-                  <path d="M 15 15 L 85 85 M 15 85 L 85 15" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-                  <circle cx="50" cy="10" r="2" fill="var(--mag-200)" />
-                  <circle cx="90" cy="50" r="2" fill="var(--mag-200)" />
-                  <circle cx="22" cy="78" r="1.5" fill="#fff" />
-                </svg>
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#fff', letterSpacing: '0.1em' }}>XPL</span>
-                </div>
-              </div>
-              <div style={{ marginTop: '1.25rem', textAlign: 'right' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--mag-200)', letterSpacing: '0.2em' }}>
-                  // SYSTEM_NODE: ACTIVE
-                </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em', marginTop: 6, lineHeight: 1.5 }}>
-                  LAT: 21.2514° N<br/>
-                  LNG: 81.6296° E
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(2rem,5vw,4rem)', marginTop: 'clamp(3rem,6vw,5rem)', alignItems: 'end' }}>
+          {/* Grid layout balancing text statement on left with visual canvas & manifesto text on right */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(2rem,4vw,4rem)', alignItems: 'center' }}>
             <div style={{ gridColumn: 'span 7' }}>
-              <h3 style={{
+              <h2 style={{
                 fontFamily: 'var(--font-display)', fontWeight: 900,
-                fontSize: 'clamp(1.8rem, 5vw, 5.5rem)',
-                lineHeight: 0.93, letterSpacing: '-0.018em',
-                textTransform: 'uppercase', color: 'rgba(255,255,255,0.88)',
+                fontSize: 'clamp(2.8rem, 6.5vw, 7.5rem)',
+                lineHeight: 0.9, letterSpacing: '-0.025em',
+                textTransform: 'uppercase', color: '#fff',
               }}>
-                IT IS THE&nbsp;<span style={{ borderBottom: '2px solid var(--mag-200)', paddingBottom: '0.05em' }}>ECOSYSTEM.</span>
-              </h3>
+                TECH IS<br />
+                <span className="glow-text" style={{ color: 'var(--mag-200)' }}>NO LONGER</span><br />
+                A SUBJECT.<br />
+                <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85em' }}>IT IS THE <span style={{ borderBottom: '2px solid var(--mag-200)' }}>ECOSYSTEM.</span></span>
+              </h2>
             </div>
-            <div style={{ gridColumn: 'span 5', borderLeft: '1px solid rgba(229,0,106,0.22)', paddingLeft: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              {[
-                'Xplora Techfest is a premier technology festival that brings together innovators, tech enthusiasts, and industry leaders to explore the latest advancements in technology.',
-                'Two days of inspiring talks, hands-on workshops, thrilling competitions, and networking opportunities — for students, professionals, and curious minds.',
-              ].map((p, i) => (
-                <p key={i} style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.9rem, 1.3vw, 1.05rem)', lineHeight: 1.7, color: 'rgba(255,255,255,0.65)' }}>{p}</p>
-              ))}
+
+            <div style={{ gridColumn: 'span 5', display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+              <div style={{ border: '1px solid rgba(225, 29, 72, 0.2)', borderRadius: 12, overflow: 'hidden' }}>
+                <PhosphorImageCanvas type="planet" height={260} />
+              </div>
+              <div style={{ borderLeft: '2px solid var(--mag-200)', paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.9rem, 1.2vw, 1.02rem)', lineHeight: 1.65, color: 'rgba(255,255,255,0.85)' }}>
+                  Xplora Techfest is a premier technology festival that brings together innovators, tech enthusiasts, and industry leaders to explore the latest advancements in technology.
+                </p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.88rem, 1.1vw, 0.98rem)', lineHeight: 1.65, color: 'rgba(255,255,255,0.68)' }}>
+                  Two days of inspiring talks, hands-on workshops, thrilling competitions, and networking opportunities — for students, professionals, and curious minds.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Stats row */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 8, marginTop: 'clamp(3.5rem,7vw,6rem)' }}>
+          {/* Stats row — well-spaced across 4 columns */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginTop: 'clamp(3.5rem,6vw,5rem)' }}>
             {[
-              { val: '2', label: 'DAYS OF FEST'       },
-              { val: '12+', label: 'COMPETITIONS'      },
-              { val: '500+', label: 'ATTENDEES'         },
-              { val: '∞', label: 'INNOVATION'          },
-            ].map(({ val, label }) => (
-              <div key={label} className="panel" style={{ padding: 'clamp(1.5rem,3vw,2.25rem)', textAlign: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(2.2rem, 5vw, 4rem)', lineHeight: 1, color: 'var(--mag-200)', textShadow: '0 0 20px rgba(229,0,106,0.5)' }}>{val}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.32)', marginTop: 8 }}>{label}</div>
+              { val: '2', label: 'DAYS OF FEST', sub: 'Nov 13–14, 2026' },
+              { val: '12+', label: 'COMPETITIONS', sub: 'Digital & Robotics' },
+              { val: '500+', label: 'ATTENDEES', sub: 'Students & Techs' },
+              { val: '∞', label: 'INNOVATION', sub: 'Endless Scope' },
+            ].map(({ val, label, sub }) => (
+              <div key={label} className="panel" style={{ padding: '1.75rem 1.5rem', textAlign: 'center' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(2.5rem, 4vw, 3.8rem)', lineHeight: 1, color: 'var(--mag-200)', textShadow: '0 0 20px rgba(229,0,106,0.5)' }}>{val}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ffffff', marginTop: 10 }}>{label}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.65)', marginTop: 4 }}>{sub}</div>
               </div>
             ))}
           </div>
 
           {/* Bottom annotation */}
-          <div style={{ marginTop: 'clamp(4rem,8vw,7rem)', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)' }}>
+          <div style={{ marginTop: 'clamp(4rem,8vw,7rem)', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)' }}>
             <span>03 / 06&nbsp;—&nbsp;ABOUT XPLORA</span>
-            <span className="about-mid">KPS COLLEGE&nbsp;::&nbsp;RAIPUR, CHHATTISGARH</span>
+            <span className="about-mid">Krishna Public School&nbsp;::&nbsp;RAIPUR, CHHATTISGARH</span>
             <span>TECHFEST&nbsp;//&nbsp;ANNUAL</span>
           </div>
         </div>
@@ -402,9 +286,9 @@ export default function HomePage() {
             {/* Featured events */}
             <div style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
-                { num: '01', name: 'HACKATHON',  tag: 'CODING // 24H',     icon: '</>' },
-                { num: '02', name: 'GAMING',      tag: 'COMPETE // RANKED', icon: '⚡'  },
-                { num: '03', name: 'ROBO DANGAL', tag: 'ROBOTICS // COMBAT', icon: '⚙'  },
+                { num: '01', name: 'HACKATHON', tag: 'CODING // 24H', icon: '</>' },
+                { num: '02', name: 'GAMING', tag: 'COMPETE // RANKED', icon: '⚡' },
+                { num: '03', name: 'ROBO DANGAL', tag: 'ROBOTICS // COMBAT', icon: '⚙' },
               ].map(ev => (
                 <div key={ev.num} className="panel" style={{ padding: '1.5rem 1.75rem', flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -413,7 +297,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(1.2rem, 2vw, 1.6rem)', textTransform: 'uppercase', letterSpacing: '-0.01em', color: '#fff', marginBottom: 4 }}>{ev.name}</h3>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--mag-500)' }}>{ev.tag}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--mag-100)' }}>{ev.tag}</span>
                   </div>
                 </div>
               ))}
@@ -423,11 +307,11 @@ export default function HomePage() {
           {/* Bottom row: more events */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10 }}>
             {[
-              { num: '04', name: 'AI TALKS',    tag: 'KNOWLEDGE', icon: '◉' },
-              { num: '05', name: 'CODE WARS',   tag: 'BATTLE',    icon: '⌥' },
-              { num: '06', name: 'VR',          tag: 'IMMERSIVE', icon: '◎' },
-              { num: '07', name: 'WEB DESIGN',  tag: 'DESIGN',    icon: '{}' },
-              { num: '08', name: 'IDEATHON',    tag: 'CREATIVE',  icon: '◈' },
+              { num: '04', name: 'AI TALKS', tag: 'KNOWLEDGE', icon: '◉' },
+              { num: '05', name: 'CODE WARS', tag: 'BATTLE', icon: '⌥' },
+              { num: '06', name: 'VR', tag: 'IMMERSIVE', icon: '◎' },
+              { num: '07', name: 'WEB DESIGN', tag: 'DESIGN', icon: '{}' },
+              { num: '08', name: 'IDEATHON', tag: 'CREATIVE', icon: '◈' },
             ].map(ev => (
               <a key={ev.num} href="/#/events" className="panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: 10, textDecoration: 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -436,7 +320,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', textTransform: 'uppercase', color: '#fff', letterSpacing: '-0.01em', marginBottom: 3 }}>{ev.name}</h3>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--mag-500)' }}>{ev.tag}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--mag-100)' }}>{ev.tag}</span>
                 </div>
               </a>
             ))}
