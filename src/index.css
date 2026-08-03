@@ -103,6 +103,12 @@ body { background: var(--black); overflow-x: hidden; }
   letter-spacing: -0.025em;
   text-transform: uppercase;
 }
+@media (max-width: 640px) {
+  .text-hero {
+    font-size: clamp(3.2rem, 14vw, 5.2rem) !important;
+    line-height: 0.92 !important;
+  }
+}
 
 .text-headline {
   font-family: var(--font-display);

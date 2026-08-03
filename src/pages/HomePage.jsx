@@ -86,12 +86,7 @@ export default function HomePage() {
           {/* Headline */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '7.5rem', paddingBottom: '2rem' }}>
 
-            <h1 className="fade-up-2" style={{
-              fontFamily: 'var(--font-display)', fontWeight: 900,
-              fontSize: 'clamp(2.4rem, 9.5vw, 10.5rem)',
-              lineHeight: 0.88, letterSpacing: '-0.025em',
-              textTransform: 'uppercase', marginBottom: 0,
-            }}>
+            <h1 className="fade-up-2 text-hero" style={{ marginBottom: 0 }}>
               <span style={{ display: 'block', color: '#fff', textShadow: '0 4px 30px rgba(0,0,0,0.8)' }}>XPLORA</span>
               <span style={{ display: 'block', color: 'transparent', WebkitTextStroke: '1.5px rgba(255,255,255,0.5)', textShadow: 'none' }}>TECHFEST</span>
               <span className="glow-text-lg" style={{ display: 'block', color: 'var(--mag-200)' }}>6.0</span>
