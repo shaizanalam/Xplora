@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
-import { Send, UserCheck } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, UserCheck, ChevronDown } from 'lucide-react';
 import PhosphorImageCanvas from '../components/PhosphorImageCanvas';
+
+const ALL_EVENTS = [
+  'HACKATHON',
+  'GAMING',
+  'AI TALKS',
+  'IDEATHON',
+  'MULTIMEDIA',
+  'VR',
+  'WEB DESIGN',
+  'CODE WARS',
+  'HURDLE MANIA',
+  'RALLY CROSS',
+  'ROBO DANGAL',
+  'ROBO KABADDI',
+  'OTHER (Specify in message)'
+];
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', institution: '', event: 'HACKATHON', message: '' });
   const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
   const [errorMsg, setErrorMsg] = useState('');
   const [focused, setFocus] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -147,23 +175,48 @@ export default function RegisterPage() {
                     style={inputStyle('institution')}
                   />
                 </div>
-                <div>
+                <div style={{ position: 'relative' }} ref={dropdownRef}>
                   <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--mag-500)', display: 'block', marginBottom: '0.75rem' }}>
                     PRIMARY EVENT
                   </label>
-                  <select
-                    value={form.event} onChange={e => setForm(f => ({ ...f, event: e.target.value }))}
-                    onFocus={() => setFocus('event')} onBlur={() => setFocus(null)}
-                    style={{ ...inputStyle('event'), appearance: 'none', cursor: 'pointer', background: 'rgba(0,0,0,0.5)' }}
+                  <div 
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    style={{ ...inputStyle('event'), display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', userSelect: 'none' }}
                   >
-                    <option value="HACKATHON">HACKATHON</option>
-                    <option value="CODE WARS">CODE WARS</option>
-                    <option value="ROBO DANGAL">ROBO DANGAL</option>
-                    <option value="AI TALKS">AI TALKS</option>
-                    <option value="GAMING">GAMING</option>
-                    <option value="VR">VR</option>
-                    <option value="OTHER">OTHER (Specify in message)</option>
-                  </select>
+                    <span>{form.event}</span>
+                    <ChevronDown style={{ width: 16, height: 16, transform: dropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                  </div>
+                  
+                  {/* Custom Dropdown List */}
+                  {dropdownOpen && (
+                    <div style={{
+                      position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100,
+                      background: 'var(--mag-800)', border: '1px solid var(--mag-200)',
+                      maxHeight: '220px', overflowY: 'auto',
+                      boxShadow: 'var(--glow-md)', marginTop: '4px'
+                    }}>
+                      {ALL_EVENTS.map(evt => (
+                        <div 
+                          key={evt}
+                          onClick={() => {
+                            setForm(f => ({ ...f, event: evt }));
+                            setDropdownOpen(false);
+                          }}
+                          style={{
+                            padding: '0.8rem 1.25rem', fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
+                            color: form.event === evt ? 'var(--mag-100)' : '#fff',
+                            background: form.event === evt ? 'rgba(229,0,106,0.1)' : 'transparent',
+                            cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)',
+                            transition: 'background 0.2s, color 0.2s'
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(229,0,106,0.15)'; e.currentTarget.style.color = 'var(--mag-200)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = form.event === evt ? 'rgba(229,0,106,0.1)' : 'transparent'; e.currentTarget.style.color = form.event === evt ? 'var(--mag-100)' : '#fff'; }}
+                        >
+                          {evt}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

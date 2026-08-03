@@ -48,6 +48,13 @@ export default function PhosphorImageCanvas({
   const particlesRef = useRef([]);
   const mouseRef    = useRef({ x: -1000, y: -1000 });
   const timeRef     = useRef(0);
+  const imgRef      = useRef(null);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/claude.webp';
+    img.onload = () => { imgRef.current = img; };
+  }, []);
 
   const startLoop = useCallback(() => {
     const canvas = canvasRef.current;
@@ -120,15 +127,13 @@ export default function PhosphorImageCanvas({
         // Add subtle glow
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
-        ctx.fillStyle = p.color.replace(')', ', 0.2)').replace('rgb', 'rgba'); // Hacky but works for hex if we convert, wait, color is hex.
-        // Actually, just set global alpha for glow
         ctx.globalAlpha = 0.2;
         ctx.fillStyle = p.color;
         ctx.fill();
         ctx.globalAlpha = 1.0;
       }
 
-      // --- Draw Floating Mascot ---
+      // --- Draw Floating Image ---
       const mX = W / 2;
       const mY = H / 2;
       const floatY = Math.sin(t * 1.5) * 12;
@@ -138,89 +143,17 @@ export default function PhosphorImageCanvas({
       ctx.translate(mX, mY + floatY);
       ctx.rotate(tilt);
 
-      // Mascot Body
-      const bw = 85;
-      const bh = 75;
-      const r = 18;
-      ctx.beginPath();
-      ctx.moveTo(-bw/2 + r, -bh/2);
-      ctx.lineTo(bw/2 - r, -bh/2);
-      ctx.arcTo(bw/2, -bh/2, bw/2, -bh/2 + r, r);
-      ctx.lineTo(bw/2, bh/2 - r);
-      ctx.arcTo(bw/2, bh/2, bw/2 - r, bh/2, r);
-      ctx.lineTo(-bw/2 + r, bh/2);
-      ctx.arcTo(-bw/2, bh/2, -bw/2, bh/2 - r, r);
-      ctx.lineTo(-bw/2, -bh/2 + r);
-      ctx.arcTo(-bw/2, -bh/2, -bw/2 + r, -bh/2, r);
-      ctx.closePath();
-      
-      ctx.fillStyle = 'rgba(5, 0, 10, 0.85)';
-      ctx.fill();
-
-      // Cyber Border with Cyan and Magenta glow
-      ctx.lineWidth = 3;
-      const gradient = ctx.createLinearGradient(-bw/2, -bh/2, bw/2, bh/2);
-      gradient.addColorStop(0, '#22d3ee');
-      gradient.addColorStop(1, '#e5006a');
-      ctx.strokeStyle = gradient;
-      
-      ctx.shadowColor = '#22d3ee';
-      ctx.shadowBlur = 12;
-      ctx.stroke();
-
-      // Antenna
-      ctx.shadowBlur = 0;
-      ctx.beginPath();
-      ctx.moveTo(0, -bh/2);
-      ctx.lineTo(0, -bh/2 - 16);
-      ctx.strokeStyle = '#e5006a';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(0, -bh/2 - 16, 4.5, 0, Math.PI*2);
-      ctx.fillStyle = '#e5006a';
-      ctx.shadowColor = '#e5006a';
-      ctx.shadowBlur = 12;
-      ctx.fill();
-
-      // Eyes (Blinking Logic)
-      const eyeSpacing = 22;
-      ctx.shadowBlur = 0;
-      const isBlinking = Math.sin(t * 4) > 0.96; 
-
-      if (isBlinking) {
-        ctx.beginPath();
-        ctx.moveTo(-eyeSpacing - 10, -6);
-        ctx.lineTo(-eyeSpacing + 10, -6);
-        ctx.moveTo(eyeSpacing - 10, -6);
-        ctx.lineTo(eyeSpacing + 10, -6);
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 3.5;
-        ctx.stroke();
-      } else {
-        // Whites
-        ctx.beginPath();
-        ctx.arc(-eyeSpacing, -6, 7, 0, Math.PI * 2);
-        ctx.arc(eyeSpacing, -6, 7, 0, Math.PI * 2);
-        ctx.fillStyle = '#fff';
-        ctx.fill();
+      if (imgRef.current) {
+        const iw = 110; 
+        const ih = (110 / imgRef.current.width) * imgRef.current.height;
         
-        // Pupils (looking at mouse gently)
-        const dx = mouse.x - mX;
-        const dy = mouse.y - mY;
-        const maxLook = 2.5;
-        const dist = Math.sqrt(dx*dx + dy*dy) || 1;
-        const lookX = Math.max(-maxLook, Math.min(maxLook, (dx/dist) * maxLook * (dist/200)));
-        const lookY = Math.max(-maxLook, Math.min(maxLook, (dy/dist) * maxLook * (dist/200)));
-
-        ctx.beginPath();
-        ctx.arc(-eyeSpacing + lookX, -6 + lookY, 3, 0, Math.PI * 2);
-        ctx.arc(eyeSpacing + lookX, -6 + lookY, 3, 0, Math.PI * 2);
-        ctx.fillStyle = '#22d3ee';
-        ctx.fill();
+        // Optional subtle glow behind the image
+        ctx.shadowColor = '#e5006a';
+        ctx.shadowBlur = 20;
+        
+        ctx.drawImage(imgRef.current, -iw/2, -ih/2, iw, ih);
       }
-
+      
       ctx.restore();
 
       if (!prefersReduced) {

@@ -94,8 +94,10 @@ export default function IntroSplash({ onComplete }) {
 
       {/* Skip control button */}
       <div style={{
-        position: 'absolute', bottom: '3.5rem', right: 'var(--pad-x)',
+        position: 'absolute', bottom: '6rem', right: 'var(--pad-x)',
         zIndex: 10000,
+        background: '#000', /* Solid black wrapper to hide the logo behind it */
+        display: 'inline-block'
       }}>
         <button
           onClick={handleFinish}
@@ -103,8 +105,6 @@ export default function IntroSplash({ onComplete }) {
           style={{
             padding: '1.2rem 2.5rem', fontSize: '0.8rem',
             boxShadow: 'var(--glow-md)',
-            background: '#000', // Solid black to hide the logo behind it
-            border: '2px solid var(--mag-500)', // Keep the magenta border
           }}
         >
           ENTER XPLORA ↗
