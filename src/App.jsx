@@ -327,8 +327,7 @@ function Footer() {
         <span>PHOSPHOR ENGINE&nbsp;//&nbsp;v4.2</span>
       </div>
       </div>
-    </div>
-    </footer >
+    </footer>
   );
 }
 
