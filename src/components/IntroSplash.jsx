@@ -4,6 +4,9 @@ export default function IntroSplash({ onComplete }) {
   const videoRef = useRef(null);
   const [fading, setFading] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    return typeof window !== 'undefined' && window.matchMedia('(max-width: 767px), (orientation: portrait)').matches;
+  });
 
   const handleFinish = () => {
     if (fading) return;
@@ -12,6 +15,15 @@ export default function IntroSplash({ onComplete }) {
       onComplete();
     }, 700);
   };
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px), (orientation: portrait)');
+    const onChange = (e) => setIsMobile(e.matches);
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', onChange);
+    };
+  }, []);
 
   const toggleSound = () => {
     if (videoRef.current) {
@@ -37,7 +49,7 @@ export default function IntroSplash({ onComplete }) {
         }
       });
     }
-  }, [onComplete]);
+  }, [onComplete, isMobile]);
 
   return (
     <div style={{
@@ -49,8 +61,9 @@ export default function IntroSplash({ onComplete }) {
       transition: 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
       userSelect: 'none', overflow: 'hidden',
     }}>
-      {/* Full-screen intro video */}
+      {/* Full-screen intro video: landscape for PC, portrait for Mobile */}
       <video
+        key={isMobile ? 'mobile-video' : 'desktop-video'}
         ref={videoRef}
         autoPlay
         playsInline
@@ -62,7 +75,16 @@ export default function IntroSplash({ onComplete }) {
           filter: 'brightness(0.95) contrast(1.1)',
         }}
       >
-        <source src="/intro.mp4" type="video/mp4" />
+        {isMobile ? (
+          <>
+            <source src="/intro-mobile.mp4" type="video/mp4" />
+            <source src="/intro_mobile.mp4" type="video/mp4" />
+            <source src="/mobile-intro.mp4" type="video/mp4" />
+            <source src="/intro.mp4" type="video/mp4" />
+          </>
+        ) : (
+          <source src="/intro.mp4" type="video/mp4" />
+        )}
       </video>
 
       {/* CRT scanlines & overlays */}
