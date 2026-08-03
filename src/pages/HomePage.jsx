@@ -84,16 +84,16 @@ export default function HomePage() {
         <div style={{ position: 'relative', zIndex: 10, height: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '0 var(--pad-x)' }}>
 
           {/* Top bar */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '7.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', paddingTop: '8.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', flexWrap: 'wrap', gap: '1.5rem' }}>
             <div className="tag-badge fade-up-1" style={{ background: 'rgba(0,0,0,0.55)' }}>
               <span className="live-dot" style={{ width: 5, height: 5 }} />
               XPLORA TECHFEST&nbsp;<span style={{ color: 'rgba(255,255,255,0.28)' }}>//&nbsp;NOV 13–14, 2026</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }} className="hero-meta">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
               {[['SECTOR', '07'], ['EVENTS', '12+'], ['STATUS', 'OPEN']].map(([k, v]) => (
-                <div key={k} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: 6 }}>
-                  <span style={{ color: 'var(--mag-500)' }}>{k}</span>
-                  <span style={{ color: 'rgba(255,255,255,0.6)' }}>{v}</span>
+                <div key={k} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.4)', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <span style={{ color: 'var(--mag-500)', fontSize: '0.5rem' }}>{k}</span>
+                  <span style={{ color: 'var(--cyan-400)', fontWeight: 700, textShadow: '0 0 8px rgba(34,211,238,0.4)' }}>{v}</span>
                 </div>
               ))}
             </div>
@@ -131,7 +131,7 @@ export default function HomePage() {
 
             <div className="fade-up-4" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
               <a href="#about" className="btn btn-solid">EXPLORE XPLORA →</a>
-              <a href="/itinerary.pdf" className="btn btn-outline" target="_blank" rel="noopener noreferrer">VIEW ITINERARY ↗</a>
+              <a href="#" className="btn btn-outline" onClick={(e) => { e.preventDefault(); alert('Itinerary coming soon!'); }} style={{ opacity: 0.5 }}>ITINERARY (SOON) ↗</a>
             </div>
           </div>
 
@@ -158,9 +158,26 @@ export default function HomePage() {
         </div>
 
         <style>{`
-          .hero-meta { display: none; }
           .hero-res  { display: none; }
-          @media (min-width: 640px) { .hero-meta { display: flex; } .hero-res { display: inline; } }
+          @media (min-width: 640px) { .hero-res { display: inline; } }
+          
+          /* Countdown Grid */
+          .countdown-grid {
+            grid-column: span 12;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+          }
+          @media (max-width: 768px) {
+            .countdown-grid {
+              grid-template-columns: repeat(2, 1fr);
+            }
+          }
+          @media (min-width: 1024px) {
+            .countdown-grid {
+              grid-column: span 7;
+            }
+          }
         `}</style>
       </section>
 
@@ -254,17 +271,48 @@ export default function HomePage() {
             <span className="accent-line" style={{ flex: 1, maxWidth: 80 }} />
           </div>
 
-          {/* Giant statement */}
-          <h2 style={{
-            fontFamily: 'var(--font-display)', fontWeight: 900,
-            fontSize: 'clamp(2.8rem, 8.5vw, 10rem)',
-            lineHeight: 0.88, letterSpacing: '-0.025em',
-            textTransform: 'uppercase', color: '#fff',
-          }}>
-            TECH IS<br />
-            <span className="glow-text" style={{ color: 'var(--mag-200)' }}>NO LONGER</span><br />
-            A SUBJECT.
-          </h2>
+          {/* Giant statement and visual */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '3rem' }}>
+            <h2 style={{
+              fontFamily: 'var(--font-display)', fontWeight: 900,
+              fontSize: 'clamp(2.8rem, 8.5vw, 10rem)',
+              lineHeight: 0.88, letterSpacing: '-0.025em',
+              textTransform: 'uppercase', color: '#fff',
+              flex: '1 1 500px',
+            }}>
+              TECH IS<br />
+              <span className="glow-text" style={{ color: 'var(--mag-200)' }}>NO LONGER</span><br />
+              A SUBJECT.
+            </h2>
+
+            <div className="about-visual" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', opacity: 0.8, paddingTop: '1rem' }}>
+              <div style={{ position: 'relative', width: 140, height: 140 }}>
+                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', animation: 'spin-slow 20s linear infinite' }}>
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(229,0,106,0.4)" strokeWidth="1" strokeDasharray="4 6" />
+                  <circle cx="50" cy="50" r="28" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                  <circle cx="50" cy="50" r="18" fill="none" stroke="rgba(229,0,106,0.2)" strokeWidth="1" strokeDasharray="2 4" />
+                  <path d="M 50 2 L 50 98 M 2 50 L 98 50" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
+                  <path d="M 15 15 L 85 85 M 15 85 L 85 15" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                  <circle cx="50" cy="10" r="2" fill="var(--mag-200)" />
+                  <circle cx="90" cy="50" r="2" fill="var(--mag-200)" />
+                  <circle cx="22" cy="78" r="1.5" fill="#fff" />
+                </svg>
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#fff', letterSpacing: '0.1em' }}>XPL</span>
+                </div>
+              </div>
+              <div style={{ marginTop: '1.25rem', textAlign: 'right' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--mag-200)', letterSpacing: '0.2em' }}>
+                  // SYSTEM_NODE: ACTIVE
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em', marginTop: 6, lineHeight: 1.5 }}>
+                  LAT: 21.2514° N<br/>
+                  LNG: 81.6296° E
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(2rem,5vw,4rem)', marginTop: 'clamp(3rem,6vw,5rem)', alignItems: 'end' }}>
             <div style={{ gridColumn: 'span 7' }}>
@@ -305,12 +353,16 @@ export default function HomePage() {
           {/* Bottom annotation */}
           <div style={{ marginTop: 'clamp(4rem,8vw,7rem)', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)' }}>
             <span>03 / 06&nbsp;—&nbsp;ABOUT XPLORA</span>
-            <span className="about-mid">KPS COLLEGE&nbsp;::&nbsp;KARACHI, PAKISTAN</span>
+            <span className="about-mid">KPS COLLEGE&nbsp;::&nbsp;RAIPUR, CHHATTISGARH</span>
             <span>TECHFEST&nbsp;//&nbsp;ANNUAL</span>
           </div>
         </div>
 
-        <style>{`.about-mid { display: none; } @media (min-width: 640px) { .about-mid { display: inline; } }`}</style>
+        <style>{`.about-mid { display: none; } @media (min-width: 640px) { .about-mid { display: inline; } }
+          @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+          .about-visual { display: none !important; }
+          @media (min-width: 900px) { .about-visual { display: flex !important; } }
+        `}</style>
       </section>
 
       {/* ══════════════════════════════════════
@@ -431,10 +483,10 @@ export default function HomePage() {
             padding: '1.5rem 2rem',
           }}>
             Don't miss out. Compete, collaborate, create. Xplora Techfest brings the brightest minds together
-            for Pakistan's most exciting technology festival.
+            for Chhattisgarh's most exciting technology festival.
           </p>
 
-          <a href="/#/contact" className="btn btn-solid" style={{ padding: '1.1rem 3rem', fontSize: '0.75rem' }}>
+          <a href="/#/register" className="btn btn-solid" style={{ padding: '1.1rem 3rem', fontSize: '0.75rem' }}>
             REGISTER NOW ↗
           </a>
         </div>

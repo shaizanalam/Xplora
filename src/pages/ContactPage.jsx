@@ -26,14 +26,42 @@ const LinkedinSVG = () => (
 
 export default function ContactPage() {
   const [form, setForm]     = useState({ name: '', email: '', message: '' });
-  const [sent, setSent]     = useState(false);
+  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [errorMsg, setErrorMsg] = useState('');
   const [focused, setFocus] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-    setForm({ name: '', email: '', message: '' });
+    setStatus('loading');
+    setErrorMsg('');
+    
+    try {
+      if (!form.email.includes('@') || !form.email.includes('.')) {
+        throw new Error('Please enter a valid email address.');
+      }
+      if (form.message.trim().length < 10) {
+        throw new Error('Please provide more detail in your message.');
+      }
+      
+      const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+      
+      if (response.ok) {
+        setStatus('success');
+        setForm({ name: '', email: '', message: '' });
+        // Optional: Reset after a few seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to send message.');
+      }
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err.message || 'An unexpected error occurred. Please try again.');
+    }
   };
 
   const inputStyle = (field) => ({
@@ -174,7 +202,7 @@ export default function ContactPage() {
                 // SECURE TRANSMISSION FORM
               </p>
 
-              {sent ? (
+              {status === 'success' ? (
                 <div style={{ textAlign: 'center', padding: '6rem 2rem', border: '1px dashed rgba(229,0,106,0.3)', background: 'rgba(229,0,106,0.05)' }}>
                   <div style={{
                     fontFamily: 'var(--font-display)', fontWeight: 900,
@@ -190,6 +218,11 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  {status === 'error' && (
+                    <div style={{ padding: '1rem', border: '1px solid rgba(255,0,0,0.5)', background: 'rgba(255,0,0,0.1)', color: '#ff6b6b', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+                      TRANSMISSION ERROR: {errorMsg}
+                    </div>
+                  )}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem' }}>
                     <div>
                       <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--mag-500)', display: 'block', marginBottom: '0.75rem' }}>
@@ -232,9 +265,9 @@ export default function ContactPage() {
                       <span className="live-dot" style={{ width: 4, height: 4 }} />
                       ALL SIGNALS ARE ENCRYPTED
                     </div>
-                    <button type="submit" className="btn btn-solid" style={{ padding: '1.2rem 3rem', justifyContent: 'center', gap: 12, fontSize: '0.75rem' }}>
+                    <button type="submit" disabled={status === 'loading'} className="btn btn-solid" style={{ padding: '1.2rem 3rem', justifyContent: 'center', gap: 12, fontSize: '0.75rem', opacity: status === 'loading' ? 0.7 : 1, cursor: status === 'loading' ? 'not-allowed' : 'pointer' }}>
                       <Send style={{ width: 14, height: 14 }} />
-                      TRANSMIT
+                      {status === 'loading' ? 'TRANSMITTING...' : 'TRANSMIT'}
                     </button>
                   </div>
                 </form>

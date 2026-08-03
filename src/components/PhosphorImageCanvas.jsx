@@ -12,21 +12,28 @@ import React, { useRef, useEffect, useCallback } from 'react';
   8. Throttled resize with debounce
 */
 
-const GAP = 14;          // dot spacing — bigger = fewer, faster
-const GLOW_THRESHOLD = 0.55; // only render glow ring above this intensity
+const MAX_PARTICLES = 150;
+const CONNECTION_DISTANCE = 120;
+const MOUSE_RADIUS = 150;
 
-function buildDots(W, H) {
-  const cols = Math.floor(W / GAP);
-  const rows = Math.floor(H / GAP);
-  const dots = new Float32Array(cols * rows * 2);
-  let i = 0;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      dots[i++] = c * GAP + GAP * 0.5;
-      dots[i++] = r * GAP + GAP * 0.5;
-    }
+function createParticles(W, H, type) {
+  const count = Math.min(MAX_PARTICLES, Math.floor((W * H) / 9000));
+  const particles = [];
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+      radius: Math.random() * 2 + 1,
+      color: type === 'planet' 
+        ? (Math.random() > 0.5 ? '#e5006a' : '#ff2688')
+        : type === 'controller'
+          ? (Math.random() > 0.5 ? '#22d3ee' : '#06b6d4')
+          : (Math.random() > 0.5 ? '#e5006a' : '#22d3ee')
+    });
   }
-  return { dots, cols, rows };
+  return particles;
 }
 
 export default function PhosphorImageCanvas({
@@ -38,7 +45,8 @@ export default function PhosphorImageCanvas({
   const canvasRef   = useRef(null);
   const rafRef      = useRef(null);
   const visibleRef  = useRef(false);
-  const dotsRef     = useRef(null);
+  const particlesRef = useRef([]);
+  const mouseRef    = useRef({ x: -1000, y: -1000 });
   const timeRef     = useRef(0);
 
   const startLoop = useCallback(() => {
@@ -48,87 +56,186 @@ export default function PhosphorImageCanvas({
 
     const loop = () => {
       if (!visibleRef.current) { rafRef.current = null; return; }
-      timeRef.current += 0.02;
+      
+      timeRef.current += 0.016;
       const t = timeRef.current;
-      const { dots, cols, rows } = dotsRef.current;
+      
       const W = canvas.width;
       const H = canvas.height;
+      const particles = particlesRef.current;
+      const mouse = mouseRef.current;
 
-      // Clear
+      // Clear with slight trailing effect for motion blur
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, W, H);
 
-      const total = cols * rows;
+      // Update and draw particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        
+        // Move
+        p.x += p.vx;
+        p.y += p.vy;
 
-      for (let i = 0; i < total; i++) {
-        const x = dots[i * 2];
-        const y = dots[i * 2 + 1];
-        let intensity = 0;
+        // Bounce
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        
+        // Mouse interaction (repel)
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MOUSE_RADIUS) {
+          const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+          p.x -= (dx / dist) * force * 2;
+          p.y -= (dy / dist) * force * 2;
+        }
 
-        if (type === 'controller') {
-          const dx = (x - W * 0.5) / (W * 0.35);
-          const dy = (y - H * 0.5) / (H * 0.35);
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const lh = Math.sqrt((dx + 0.5) ** 2 + (dy - 0.2) ** 2);
-          const rh = Math.sqrt((dx - 0.5) ** 2 + (dy - 0.2) ** 2);
-          const cb = Math.abs(dy) < 0.25 && Math.abs(dx) < 0.6;
-          if ((lh < 0.45 || rh < 0.45 || cb) && dist < 0.95) {
-            intensity = Math.sin(x * 0.05 + t) * 0.5 + 0.5;
-            if (Math.sin(y * 0.08 - t * 2) > 0.3) intensity = Math.min(1, intensity + 0.28);
-          }
-        } else if (type === 'planet') {
-          const dx = x - W * 0.5;
-          const dy = y - H * 0.5;
-          const r  = Math.min(W, H) * 0.35;
-          const d  = Math.sqrt(dx * dx + dy * dy);
-          if (d < r) {
-            intensity = Math.cos(d * 0.05 - t) * 0.5 + 0.5;
-            intensity += Math.sin(Math.atan2(dy, dx) * 6 + t * 0.2) * 0.22;
-          } else if (Math.abs(dy - Math.sin(dx * 0.02 + t) * 18) < 5) {
-            intensity = 0.75;
-          }
-        } else {
-          // grid
-          const w1 = Math.sin(x * 0.02 + t * 2) * 38;
-          const w2 = Math.cos(y * 0.03 - t) * 28;
-          if (Math.abs(y - H * 0.5 - w1) < 14 || Math.abs(x - W * 0.5 - w2) < 18) {
-            intensity = 0.88;
-          } else if (Math.random() < 0.06) {
-            intensity = 0.28;
+        // Draw connections
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx2 = p.x - p2.x;
+          const dy2 = p.y - p2.y;
+          const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+
+          if (dist2 < CONNECTION_DISTANCE) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            const alpha = 1 - (dist2 / CONNECTION_DISTANCE);
+            // Mix colors
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.15})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
           }
         }
 
-        if (intensity < 0.06) continue;
-
-        const radius = Math.max(0.8, Math.min(4.5, intensity * 4.2));
-
-        // Fake glow: draw a soft larger circle first (no shadowBlur needed)
-        if (intensity > GLOW_THRESHOLD) {
-          ctx.beginPath();
-          ctx.arc(x, y, radius * 2.2, 0, 6.2832);
-          ctx.fillStyle = `rgba(229,0,106,${(intensity - GLOW_THRESHOLD) * 0.18})`;
-          ctx.fill();
-        }
-
-        // Core dot
+        // Draw particle
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, 6.2832);
-        const alpha = Math.min(1, intensity * 0.88 + 0.12);
-        if (intensity > 0.65) {
-          ctx.fillStyle = `rgba(255,38,136,${alpha})`;
-        } else if (intensity > 0.35) {
-          ctx.fillStyle = `rgba(229,0,106,${alpha * 0.85})`;
-        } else {
-          ctx.fillStyle = `rgba(180,0,80,${alpha * 0.65})`;
-        }
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        
+        // Add subtle glow
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+        ctx.fillStyle = p.color.replace(')', ', 0.2)').replace('rgb', 'rgba'); // Hacky but works for hex if we convert, wait, color is hex.
+        // Actually, just set global alpha for glow
+        ctx.globalAlpha = 0.2;
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      }
+
+      // --- Draw Floating Mascot ---
+      const mX = W / 2;
+      const mY = H / 2;
+      const floatY = Math.sin(t * 1.5) * 12;
+      const tilt = Math.cos(t * 1.2) * 0.04;
+
+      ctx.save();
+      ctx.translate(mX, mY + floatY);
+      ctx.rotate(tilt);
+
+      // Mascot Body
+      const bw = 85;
+      const bh = 75;
+      const r = 18;
+      ctx.beginPath();
+      ctx.moveTo(-bw/2 + r, -bh/2);
+      ctx.lineTo(bw/2 - r, -bh/2);
+      ctx.arcTo(bw/2, -bh/2, bw/2, -bh/2 + r, r);
+      ctx.lineTo(bw/2, bh/2 - r);
+      ctx.arcTo(bw/2, bh/2, bw/2 - r, bh/2, r);
+      ctx.lineTo(-bw/2 + r, bh/2);
+      ctx.arcTo(-bw/2, bh/2, -bw/2, bh/2 - r, r);
+      ctx.lineTo(-bw/2, -bh/2 + r);
+      ctx.arcTo(-bw/2, -bh/2, -bw/2 + r, -bh/2, r);
+      ctx.closePath();
+      
+      ctx.fillStyle = 'rgba(5, 0, 10, 0.85)';
+      ctx.fill();
+
+      // Cyber Border with Cyan and Magenta glow
+      ctx.lineWidth = 3;
+      const gradient = ctx.createLinearGradient(-bw/2, -bh/2, bw/2, bh/2);
+      gradient.addColorStop(0, '#22d3ee');
+      gradient.addColorStop(1, '#e5006a');
+      ctx.strokeStyle = gradient;
+      
+      ctx.shadowColor = '#22d3ee';
+      ctx.shadowBlur = 12;
+      ctx.stroke();
+
+      // Antenna
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.moveTo(0, -bh/2);
+      ctx.lineTo(0, -bh/2 - 16);
+      ctx.strokeStyle = '#e5006a';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, -bh/2 - 16, 4.5, 0, Math.PI*2);
+      ctx.fillStyle = '#e5006a';
+      ctx.shadowColor = '#e5006a';
+      ctx.shadowBlur = 12;
+      ctx.fill();
+
+      // Eyes (Blinking Logic)
+      const eyeSpacing = 22;
+      ctx.shadowBlur = 0;
+      const isBlinking = Math.sin(t * 4) > 0.96; 
+
+      if (isBlinking) {
+        ctx.beginPath();
+        ctx.moveTo(-eyeSpacing - 10, -6);
+        ctx.lineTo(-eyeSpacing + 10, -6);
+        ctx.moveTo(eyeSpacing - 10, -6);
+        ctx.lineTo(eyeSpacing + 10, -6);
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+      } else {
+        // Whites
+        ctx.beginPath();
+        ctx.arc(-eyeSpacing, -6, 7, 0, Math.PI * 2);
+        ctx.arc(eyeSpacing, -6, 7, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        
+        // Pupils (looking at mouse gently)
+        const dx = mouse.x - mX;
+        const dy = mouse.y - mY;
+        const maxLook = 2.5;
+        const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        const lookX = Math.max(-maxLook, Math.min(maxLook, (dx/dist) * maxLook * (dist/200)));
+        const lookY = Math.max(-maxLook, Math.min(maxLook, (dy/dist) * maxLook * (dist/200)));
+
+        ctx.beginPath();
+        ctx.arc(-eyeSpacing + lookX, -6 + lookY, 3, 0, Math.PI * 2);
+        ctx.arc(eyeSpacing + lookX, -6 + lookY, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#22d3ee';
         ctx.fill();
       }
+
+      // Cheek blushes
+      ctx.beginPath();
+      ctx.arc(-eyeSpacing - 8, 8, 4, 0, Math.PI * 2);
+      ctx.arc(eyeSpacing + 8, 8, 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(229, 0, 106, 0.4)';
+      ctx.shadowColor = '#e5006a';
+      ctx.shadowBlur = 8;
+      ctx.fill();
+
+      ctx.restore();
 
       rafRef.current = requestAnimationFrame(loop);
     };
 
     rafRef.current = requestAnimationFrame(loop);
-  }, [type]);
+  }, []);
 
   const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -137,8 +244,8 @@ export default function PhosphorImageCanvas({
     const H = height;
     canvas.width  = W;
     canvas.height = H;
-    dotsRef.current = buildDots(W, H);
-  }, [height]);
+    particlesRef.current = createParticles(W, H, type);
+  }, [height, type]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -146,7 +253,6 @@ export default function PhosphorImageCanvas({
 
     initCanvas();
 
-    // Only animate when visible
     const observer = new IntersectionObserver(
       ([entry]) => {
         visibleRef.current = entry.isIntersecting;
@@ -156,7 +262,6 @@ export default function PhosphorImageCanvas({
     );
     observer.observe(canvas);
 
-    // Debounced resize
     let resizeTimer;
     const onResize = () => {
       clearTimeout(resizeTimer);
@@ -166,9 +271,25 @@ export default function PhosphorImageCanvas({
     };
     window.addEventListener('resize', onResize, { passive: true });
 
+    const onMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    };
+    const onMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+
+    canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('mouseleave', onMouseLeave);
+
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', onResize);
+      canvas.removeEventListener('mousemove', onMouseMove);
+      canvas.removeEventListener('mouseleave', onMouseLeave);
       if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
     };
   }, [initCanvas, startLoop]);
@@ -200,7 +321,7 @@ export default function PhosphorImageCanvas({
         border: '1px solid rgba(229,0,106,0.3)',
         pointerEvents: 'none',
       }}>
-        CANVAS // DOT-MATRIX
+        CANVAS // NEURAL-NET
       </div>
       <div style={{
         position: 'absolute', bottom: 10, right: 10,
@@ -209,7 +330,7 @@ export default function PhosphorImageCanvas({
         color: 'rgba(255,255,255,0.3)',
         pointerEvents: 'none',
       }}>
-        MONOCHROME PHOSPHOR
+        INTERACTIVE NEXUS
       </div>
     </div>
   );

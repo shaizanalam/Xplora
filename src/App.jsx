@@ -1,10 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { HashRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom';
-import CustomCursor from './components/CustomCursor';
 import IntroSplash from './components/IntroSplash';
 import HomePage from './pages/HomePage';
 import EventsPage from './pages/EventsPage';
 import ContactPage from './pages/ContactPage';
+import RegisterPage from './pages/RegisterPage';
+import SchedulePage from './pages/SchedulePage';
+import SpeakersPage from './pages/SpeakersPage';
+import SponsorsPage from './pages/SponsorsPage';
+import FAQPage from './pages/FAQPage';
+import TeamPage from './pages/TeamPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 
 /* ─────────────────────────────
    SCROLL TO TOP ON ROUTE CHANGE
@@ -21,6 +28,8 @@ function ScrollReset() {
 const NAV = [
   { label: 'HOME',    to: '/'        },
   { label: 'EVENTS',  to: '/events'  },
+  // { label: 'SCHEDULE', to: '/schedule' },
+  // { label: 'SPEAKERS', to: '/speakers' },
   { label: 'CONTACT', to: '/contact' },
 ];
 
@@ -94,7 +103,7 @@ function Header() {
             <NavLink to="/events" className="btn btn-outline hdr-cta" style={{ padding: '0.52rem 1.3rem', fontSize: '0.62rem' }}>
               EVENTS ↗
             </NavLink>
-            <NavLink to="/contact" className="btn btn-solid hdr-cta" style={{ padding: '0.52rem 1.3rem', fontSize: '0.62rem' }}>
+            <NavLink to="/register" className="btn btn-solid hdr-cta" style={{ padding: '0.52rem 1.3rem', fontSize: '0.62rem' }}>
               REGISTER →
             </NavLink>
             <button
@@ -153,7 +162,7 @@ function Header() {
             </NavLink>
           ))}
 
-          <NavLink to="/contact" className="btn btn-solid" style={{ marginTop: '3rem', padding: '1.1rem 2.5rem', justifyContent: 'center', alignSelf: 'flex-start' }} onClick={() => setOpen(false)}>
+          <NavLink to="/register" className="btn btn-solid" style={{ marginTop: '3rem', padding: '1.1rem 2.5rem', justifyContent: 'center', alignSelf: 'flex-start' }} onClick={() => setOpen(false)}>
             REGISTER NOW ↗
           </NavLink>
         </div>
@@ -189,8 +198,12 @@ function Header() {
    FOOTER
 ───────────────────────────── */
 function Footer() {
-  const FOOT_NAV   = ['HOME', 'EVENTS', 'CONTACT'];
-  const FOOT_TO    = ['/', '/events', '/contact'];
+  const FOOT_NAV   = ['HOME', 'EVENTS', 'CONTACT', 'REGISTER'];
+  const FOOT_TO    = ['/', '/events', '/contact', '/register'];
+  // const FOOT_ABOUT = ['SCHEDULE', 'SPEAKERS', 'SPONSORS', 'TEAM', 'FAQ'];
+  // const FOOT_ABOUT_TO = ['/schedule', '/speakers', '/sponsors', '/team', '/faq'];
+  const FOOT_ABOUT = [];
+  const FOOT_ABOUT_TO = [];
   const TOP_EVENTS = ['HACKATHON', 'CODE WARS', 'ROBO DANGAL', 'AI TALKS', 'GAMING', 'VR'];
 
   return (
@@ -208,7 +221,7 @@ function Footer() {
         }}>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--mag-500)', marginBottom: '1.75rem' }}>
-              XPLORA TECHFEST 6.0&nbsp;//&nbsp;KPS COLLEGE
+              XPLORA TECHFEST 6.0&nbsp;//&nbsp;KRISHNA PUBLIC SCHOOL
             </p>
             <h2 style={{
               fontFamily: 'var(--font-display)', fontWeight: 900,
@@ -220,7 +233,7 @@ function Footer() {
               <span className="glow-text-lg" style={{ color: 'var(--mag-200)' }}>EXPLORE.</span>
             </h2>
           </div>
-          <NavLink to="/contact" className="btn btn-solid" style={{ padding: '1.2rem 3rem', alignSelf: 'flex-end', fontSize: '0.72rem' }}>
+          <NavLink to="/register" className="btn btn-solid" style={{ padding: '1.2rem 3rem', alignSelf: 'flex-end', fontSize: '0.72rem' }}>
             REGISTER NOW ↗
           </NavLink>
         </div>
@@ -253,6 +266,19 @@ function Footer() {
             </p>
             {FOOT_NAV.map((l, i) => (
               <NavLink key={l} to={FOOT_TO[i]} style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.69rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.42)', textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = 'var(--mag-200)'}
+                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.42)'}
+              >{l}</NavLink>
+            ))}
+          </div>
+
+          {/* About */}
+          <div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--mag-500)', marginBottom: '1.4rem' }}>
+              //&nbsp;ABOUT
+            </p>
+            {FOOT_ABOUT.map((l, i) => (
+              <NavLink key={l} to={FOOT_ABOUT_TO[i]} style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.69rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.42)', textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = 'var(--mag-200)'}
                 onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.42)'}
               >{l}</NavLink>
@@ -297,14 +323,17 @@ function Footer() {
         {/* Bottom strip */}
         <div style={{
           display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8,
-          padding: '1.5rem 0',
+          padding: '1.5rem 0', borderTop: '1px solid rgba(255,255,255,0.03)', marginTop: '2rem',
           fontFamily: 'var(--font-mono)', fontSize: '0.54rem',
           letterSpacing: '0.18em', textTransform: 'uppercase',
           color: 'rgba(255,255,255,0.17)',
         }}>
-          <span>XPLORA TECHFEST&nbsp;//&nbsp;KPS COLLEGE</span>
+          <span>XPLORA TECHFEST&nbsp;//&nbsp;KRISHNA PUBLIC SCHOOL</span>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+            {/* <NavLink to="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>PRIVACY POLICY</NavLink> */}
+            {/* <NavLink to="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>TERMS & CONDITIONS</NavLink> */}
+          </div>
           <span>© 2026&nbsp;ALL RIGHTS RESERVED</span>
-          <span>PHOSPHOR ENGINE&nbsp;//&nbsp;v4.2</span>
         </div>
       </div>
     </footer>
@@ -330,10 +359,9 @@ export default function App() {
 
   return (
     <Router>
-      <div style={{ background: '#000', minHeight: '100vh', cursor: 'none', userSelect: 'none' }}>
+      <div style={{ background: '#000', minHeight: '100vh', userSelect: 'none' }}>
         {showIntro && <IntroSplash onComplete={() => setShowIntro(false)} />}
         <div ref={progressRef} className="scroll-indicator" aria-hidden="true" />
-        <CustomCursor />
         <ScrollReset />
         <Header />
 
@@ -342,6 +370,14 @@ export default function App() {
             <Route path="/"        element={<HomePage />}    />
             <Route path="/events"  element={<EventsPage />}  />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/speakers" element={<SpeakersPage />} />
+            <Route path="/sponsors" element={<SponsorsPage />} />
+            <Route path="/faq"      element={<FAQPage />} />
+            <Route path="/team"     element={<TeamPage />} />
+            <Route path="/privacy"  element={<PrivacyPage />} />
+            <Route path="/terms"    element={<TermsPage />} />
           </Routes>
         </main>
 
