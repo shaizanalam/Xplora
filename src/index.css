@@ -1,0 +1,475 @@
+@import "tailwindcss";
+
+/* GPU compositing hints — added at top to ensure painting stays cheap */
+.scanline-beam,
+.scroll-indicator,
+.live-dot::before {
+  will-change: transform;
+}
+
+/* Force hardware-accelerated layers for heavy overlay elements */
+.crt-scanlines,
+.crt-overlay,
+.screen-vignette,
+.noise-overlay {
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+/* canvas elements should not trigger layout on size change */
+canvas {
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* ================================================================
+   PHOSPHOR DESIGN SYSTEM — EDITORIAL ELEGANCE v2
+   Pure Black + Magenta Phosphor | Premium Gaming Editorial
+================================================================ */
+
+:root {
+  /* Color Tokens */
+  --black:    #000000;
+  --black-900: #050505;
+  --mag-900:  #0a0006;
+  --mag-800:  #140009;
+  --mag-700:  #200010;
+  --mag-600:  #330018;
+  --mag-500:  #550029;
+  --mag-400:  #7a003b;
+  --mag-300:  #aa0052;
+  --mag-200:  #e5006a;   /* Primary — slightly cooler, more elegant */
+  --mag-100:  #ff2688;   /* Bright phosphor */
+  --mag-50:   #ff5aaa;   /* Light pink */
+
+  /* Typography */
+  --font-display: 'Antonio', sans-serif;
+  --font-wide:    'Syncopate', sans-serif;
+  --font-mono:    'JetBrains Mono', 'Space Mono', monospace;
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Glows — restrained, professional, less blinding */
+  --glow-xs:  0 0 6px rgba(229, 0, 106, 0.15);
+  --glow-sm:  0 0 12px rgba(229, 0, 106, 0.25);
+  --glow-md:  0 0 20px rgba(229, 0, 106, 0.35);
+  --glow-lg:  0 0 35px rgba(255, 38, 136, 0.4), 0 0 70px rgba(229, 0, 106, 0.15);
+
+  /* Spacing */
+  --pad-x:    clamp(1.5rem, 5vw, 6rem);
+  --space-section: clamp(5rem, 11vw, 10rem);
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ================================================================
+   RESET
+================================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  background: var(--black);
+  color: #fff;
+  font-family: var(--font-mono);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  cursor: none;
+}
+body { background: var(--black); overflow-x: hidden; }
+
+/* ================================================================
+   SCROLLBAR
+================================================================ */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: var(--mag-600); }
+::-webkit-scrollbar-thumb:hover { background: var(--mag-200); }
+
+::selection { background: var(--mag-200); color: #000; }
+
+/* ================================================================
+   TYPOGRAPHY SCALE
+================================================================ */
+
+.text-hero {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3.5rem, 10vw, 11rem);
+  line-height: 0.90;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.text-headline {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.8rem, 7.5vw, 8.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.text-subhead {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+
+.text-card-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 3vw, 2.8rem);
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.text-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  font-weight: 400;
+}
+.text-label-xs {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.text-body {
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.58);
+}
+
+.text-nav {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* ================================================================
+   COLOR UTILITIES
+================================================================ */
+.text-mag        { color: var(--mag-200); }
+.text-mag-bright { color: var(--mag-100); }
+.text-mag-dim    { color: var(--mag-500); }
+.text-white-dim  { color: rgba(255,255,255,0.55); }
+.text-white-faint{ color: rgba(255,255,255,0.3); }
+
+/* ================================================================
+   GLOW TEXT
+================================================================ */
+.glow-text {
+  text-shadow:
+    0 0 10px rgba(229, 0, 106, 0.55),
+    0 0 25px rgba(229, 0, 106, 0.25);
+}
+.glow-text-lg {
+  text-shadow:
+    0 0 18px rgba(255, 38, 136, 0.8),
+    0 0 50px rgba(229, 0, 106, 0.45),
+    0 0 100px rgba(229, 0, 106, 0.15);
+}
+
+/* ================================================================
+   CRT / PHOSPHOR VISUAL OVERLAYS
+================================================================ */
+
+.crt-scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px, transparent 2px,
+    rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.crt-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%),
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.2;
+}
+
+.scanline-beam {
+  position: absolute; top: 0; inset-inline: 0; height: 5px;
+  background: linear-gradient(180deg, transparent, rgba(229,0,106,0.06), transparent);
+  animation: scanline-sweep 24s linear infinite;
+  pointer-events: none;
+  z-index: 12;
+  will-change: transform;
+}
+
+.noise-overlay {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 13;
+  mix-blend-mode: overlay;
+}
+
+.screen-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* ================================================================
+   DOT MATRIX BACKGROUNDS
+================================================================ */
+.dot-matrix-bg {
+  background-image: radial-gradient(rgba(229,0,106,0.12) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.dot-matrix-dense {
+  background-image: radial-gradient(rgba(229,0,106,0.18) 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+/* ================================================================
+   ANIMATIONS
+================================================================ */
+
+@keyframes flicker {
+  0%,100% { opacity: 1; }
+  47%  { opacity: 1;    }
+  48%  { opacity: 0.93; }
+  49%  { opacity: 1;    }
+  83%  { opacity: 1;    }
+  84%  { opacity: 0.96; }
+  85%  { opacity: 1;    }
+}
+.animate-flicker { animation: flicker 7s infinite; }
+
+@keyframes pulse-glow {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%     { opacity: 0.5; transform: scale(1.5); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up-1 { animation: fade-up 0.85s 0.05s var(--ease-out-expo) both; }
+.fade-up-2 { animation: fade-up 0.85s 0.18s var(--ease-out-expo) both; }
+.fade-up-3 { animation: fade-up 0.85s 0.32s var(--ease-out-expo) both; }
+.fade-up-4 { animation: fade-up 0.85s 0.48s var(--ease-out-expo) both; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: flex; width: 200%;
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+.animate-marquee:hover { animation-play-state: paused; }
+
+/* ================================================================
+   LIVE DOT
+================================================================ */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--mag-200);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.live-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: var(--mag-200);
+  opacity: 0.3;
+  animation: pulse-glow 2.2s ease-in-out infinite;
+}
+
+/* ================================================================
+   TAG BADGE
+================================================================ */
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.32rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(229, 0, 106, 0.015);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mag-100);
+}
+
+/* ================================================================
+   ACCENT LINES
+================================================================ */
+.accent-line {
+  display: block; height: 1px;
+  background: linear-gradient(90deg, var(--mag-200), transparent);
+}
+.section-rule {
+  display: block; width: 100%; height: 1px;
+  background: rgba(255,255,255,0.055);
+}
+
+/* ================================================================
+   NAV LINK UNDERLINE
+================================================================ */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--mag-200);
+  transition: width 0.35s var(--ease-out-expo);
+}
+.nav-link:hover::after { width: 100%; }
+
+/* ================================================================
+   PANEL COMPONENT
+================================================================ */
+.panel {
+  position: relative;
+  background: rgba(229, 0, 106, 0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+.panel:hover {
+  border-color: rgba(229,0,106,0.32);
+  background: rgba(229,0,106,0.04);
+  box-shadow: var(--glow-sm), inset 0 0 40px rgba(229,0,106,0.03);
+}
+.panel::before, .panel::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.panel::before { top: -1px; left: -1px; border-top: 1px solid var(--mag-200); border-left: 1px solid var(--mag-200); }
+.panel::after  { bottom: -1px; right: -1px; border-bottom: 1px solid var(--mag-200); border-right: 1px solid var(--mag-200); }
+.panel:hover::before, .panel:hover::after { opacity: 1; }
+
+/* ================================================================
+   BUTTONS
+================================================================ */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.25s var(--ease-out-expo),
+    border-color 0.25s var(--ease-out-expo),
+    background-color 0.25s var(--ease-out-expo),
+    box-shadow 0.25s var(--ease-out-expo),
+    transform 0.18s var(--ease-out-expo);
+}
+.btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  transform: translateX(-120%);
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.btn:hover::after { transform: translateX(120%); }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn-outline {
+  padding: 0.9rem 2rem;
+  background: transparent;
+  border: 1px solid rgba(229,0,106,0.35);
+  color: rgba(255,255,255,0.88);
+}
+.btn-outline:hover {
+  border-color: var(--mag-200);
+  color: var(--mag-100);
+  box-shadow: var(--glow-md);
+}
+
+.btn-solid {
+  padding: 0.9rem 2rem;
+  background: rgba(51,0,24,0.85);
+  border: 1px solid var(--mag-200);
+  color: #fff;
+}
+.btn-solid:hover {
+  background: var(--mag-200);
+  border-color: var(--mag-100);
+  color: #000;
+  box-shadow: var(--glow-lg);
+}
+
+.btn-ghost {
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.09);
+  color: rgba(255,255,255,0.5);
+}
+.btn-ghost:hover {
+  border-color: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+/* ================================================================
+   SCROLL PROGRESS BAR
+================================================================ */
+.scroll-indicator {
+  position: fixed;
+  left: 0; top: 0;
+  width: 2px; height: 0%;
+  background: linear-gradient(180deg, var(--mag-200), var(--mag-100));
+  box-shadow: var(--glow-sm);
+  z-index: 200;
+  transition: height 0.08s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
